@@ -1,0 +1,25 @@
+Code for making button using pull up resistor
+#include <avr/io.h>
+
+int main(void){
+    DDRB = 0b00100000; //set portb pin 5(digital pin 13) as outpt
+    PORTB = 0b00000000; // set pin 5 value
+
+    DDRD = 0b00000000; //set portd pins as input
+    PORTD = 0b11111111; // set all 1 to make pull up
+    
+    while (1){
+        if (PIND & 0b10000000){
+            PORTB = 0b00100000;
+            
+        }
+        else{
+            PORTB = 0b00000000;
+        }
+    }
+    
+    
+    return 0;
+}
+
+set up

@@ -1,0 +1,36 @@
+This lesson I experimented with buttons, using them to make LEDs flash. Check picture of 02 to see
+how to construct the circuit.
+
+Code
+#include <avr/io.h>
+
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
+#include <util/delay.h>
+
+#include <avr/interrupt.h>
+
+int main(void){
+    DDRB = 0b00100000; //set pin 5 as output
+    PORTB = 0b0000000;
+    
+    
+    DDRD = 0b00000000; //set portd as input
+    PORTD = 0b11111111; // pull up resisto  r
+    while (1){
+        if (PIND & 0b10000000){
+            PORTB = 0b00010000;//red high and red low and green low
+            
+        }else{
+            PORTB = 0b00100000;//red low and red low and green high
+        }
+	_delay_ms(250);
+	PORTB = 0b00001000;//red stay,red high, green low
+
+	_delay_ms(250);
+
+
+    }
+    return 0;
+}

@@ -1,3 +1,9 @@
+	//put into another terminal to see
+	//cmd /c mode com3 baud=9600 parity=n data=8
+	//cmd /c type com3
+
+
+
 Code:
 #include <avr/io.h>
 
@@ -32,10 +38,6 @@ int main(void) {
 	//send data
 	//assign the ASCII code for A to UDR0
 	UDR0 = 'A';
-	//put into another terminal to see
-	//cmd /c mode com3 baud=9600 parity=n data=8
-	//cmd /c type com3
-
 
 	return 0;
 }

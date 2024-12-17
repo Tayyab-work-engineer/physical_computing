@@ -41,3 +41,68 @@ int main(void) {
 
 	return 0;
 }
+
+
+For recieving data,
+
+To run the code put into command promt
+
+avr-gcc -Wall -g -Os -mmcu=atmega328p code.c -o code.elf
+
+avr-objcopy -O ihex code.elf code.hex
+
+avrdude -C "C:\Users\mtbai\Downloads\arduino-1.8.19-windows\arduino-1.8.19\hardware\tools\avr\etc\avrdude.conf" -p atmega328p -c arduino -P COM3 -b 115200 -D -U flash:w:"C:\Users\mtbai\Desktop\code.hex":i
+
+cmd /c mode com3 baud=9600 parity=n data=8
+
+echo A > COM3
+
+
+
+Code:
+#include <avr/io.h>
+
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
+#include <util/delay.h>
+#define BAUD 9600
+#include <util/setbaud.h>
+
+
+void uart_init(void)
+{
+	//baud rate generator
+	//ensure the timing of pulses
+	//corresponds to the expected bit rate
+	UBRR0H = UBRRH_VALUE;
+	UBRR0L = UBRRL_VALUE;
+
+	//character size 8
+	UCSR0C = UCSR0C | (1<<UCSZ01) | (1<<UCSZ00); //bitwise OR
+
+	//transmitter enable
+	UCSR0B = UCSR0B | (1<<RXEN0) | (1<<RXEN0);
+	return;
+}
+
+int main(void) {
+	char c=0;
+	DDRB = (1<<PB5);
+	PORTB = 0; //start as 0
+
+	//configure UART
+	uart_init();
+
+	//make a busy while loop , keep checking if any data is recieved
+	while( !(UCSR0A & (1<<RXC0)) ); //if data is not recieved keep doing	
+
+	//UDR0 is used for transmitting and recieving
+	//so it could contain data that has been transmitted or recieved
+	c = UDR0; //will copy UDR0 into c
+
+	if(c==65)
+		PORTB = (1<<PB5);
+
+	return 0;
+}

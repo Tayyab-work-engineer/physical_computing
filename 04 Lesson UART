@@ -1,6 +1,9 @@
-	//put into another terminal to see
-	//cmd /c mode com3 baud=9600 parity=n data=8
-	//cmd /c type com3
+first run the code using command prompt then as soon as
+put into another terminal to see:
+cmd /c mode com3 baud=9600 parity=n data=8
+cmd /c type com3
+
+if not working, press the red button on arduino when you run: cmd /c type com3
 
 
 

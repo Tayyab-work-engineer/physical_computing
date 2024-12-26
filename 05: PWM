@@ -5,22 +5,27 @@ Code below and use pic 05 to see the circuit construction
 
 int main()
 {
-	DDRD = (1<<PD6); //Pin becomes an output
-	
-	//TCCR0A - Timer/Counter Control Register A
-	//Clear OC0A on compare match, set OC0A at bottom(non-inverting mode)
-	//Set up Wave generation mode 
-	//Prescalar : Clock Select Bit
-	//Set a value for the compare register
-	TCCR0A |= (1<<COM0A1);
-	TCCR0A |= (1<<WGM01) | (1<<WGM00); //Fast PWM
+	DDRD = (1<<PD6); // Pin PD6 becomes an output (OC0A)
 
-	//Before switching the timer
-	OCR0A = 0xFF * 0.5; // set the time you want LED on
+    	// Configure Timer/Counter Control Register A
+    	// - Clear OC0A on compare match, set OC0A at bottom (non-inverting mode)
+    	// - Fast PWM mode (WGM02:WGM00 = 0b011)
+    	TCCR0A |= (1<<COM0A1);
+    	TCCR0A |= (1<<WGM01) | (1<<WGM00); // Fast PWM mode
 
-	TCCR0B |= (1<<CS00);
+	// Set the compare match value to control the duty cycle
+    	OCR0A = 0xFF; // Maximum duty cycle (100%)
+
+    	// Configure Timer/Counter Control Register B
+    	// - No prescaler (Clock Select Bit = 0b001)
+    	TCCR0B |= (1<<CS00);
+
+    	while (1) {
+        	// Main loop
+    	}
 	
 	
 
 	return 0;
 }
+

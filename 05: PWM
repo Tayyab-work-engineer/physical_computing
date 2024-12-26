@@ -1,0 +1,26 @@
+Code below and use pic 05 to see the circuit construction
+
+
+#include <avr/io.h>
+
+int main()
+{
+	DDRD = (1<<PD6); //Pin becomes an output
+	
+	//TCCR0A - Timer/Counter Control Register A
+	//Clear OC0A on compare match, set OC0A at bottom(non-inverting mode)
+	//Set up Wave generation mode 
+	//Prescalar : Clock Select Bit
+	//Set a value for the compare register
+	TCCR0A |= (1<<COM0A1);
+	TCCR0A |= (1<<WGM01) | (1<<WGM00); //Fast PWM
+
+	//Before switching the timer
+	OCR0A = 0xFF * 0.5; // set the time you want LED on
+
+	TCCR0B |= (1<<CS00);
+	
+	
+
+	return 0;
+}

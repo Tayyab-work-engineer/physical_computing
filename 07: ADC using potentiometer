@@ -1,0 +1,38 @@
+
+Construct circuit using pic 07 
+Code:
+#include <avr/io.h>
+
+int main(void)
+{
+    // Configure PB1 as output
+    DDRB = (1<<PB1);
+
+    // Set up ADC
+    ADMUX = (1<<REFS0); // Use AVcc as voltage reference
+    ADMUX |= (1<<ADLAR); // Left-adjust the ADC result
+    ADMUX |= (1<<MUX0); // Select ADC1 as input
+
+    // Set ADC prescaler to 128
+    ADCSRA = (1<<ADPS0) | (1<<ADPS1) | (1<<ADPS2);
+
+    // Enable ADC
+    ADCSRA |= (1<<ADEN);
+
+    while (1) {
+        // Start ADC conversion
+        ADCSRA |= (1<<ADSC);
+        // Wait for conversion to complete
+        while (ADCSRA & (1<<ADSC))
+            ;
+
+        // Check ADC result and toggle LED
+        if (ADCH > 50) {
+            PORTB |= (1<<PB1); // Turn on PB1
+        } else {
+            PORTB &= ~(1<<PB1); // Turn off PB1
+        }
+    }
+
+    return 0;
+}

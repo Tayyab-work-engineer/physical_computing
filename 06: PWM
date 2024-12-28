@@ -1,0 +1,33 @@
+Circuit set up in picture 06 Servo motor
+
+Code
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
+
+#include <avr/io.h>
+
+int main()
+{
+    // Set PB1 (OC1A) as output
+    DDRB = (1 << PB1);
+    PORTB = 0b00000000;
+
+    // Configure Timer1 for Fast PWM with ICR1 as TOP
+    TCCR1A = (1 << COM1A1) | (1 << WGM11); // Clear OC1A on Compare Match, WGM[1:0] bits
+    TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS11); // WGM[3:2] bits, Prescaler = 8
+
+    // Set ICR1 for 50 Hz PWM (20 ms period)
+    ICR1 = 39999;
+
+    // Set OCR1A for 90-degree position (1.5 ms pulse)
+    OCR1A = 3000; // 1.5 ms = 3000 ticks (1.5 ms * 16 MHz / 8)
+
+    // Infinite loop
+    while (1)
+    {
+        // Main loop (do nothing)
+    }
+
+    return 0;
+}

@@ -1,0 +1,27 @@
+Circuit set up is 5v on pd2. By taking it in and out, it will switch the built in led.
+code:
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+ISR(INT0_vect){
+	//toggle LED
+	PORTB ^= (1<<PB5);
+}
+
+int main(void)
+{
+	DDRB |= (1<<PB5);
+	PORTB = 0x00;
+
+	DDRD = 0xFF;
+
+	//Set to trigger on change in logic level
+	EICRA |= (1<<ISC00);
+
+	//Enable interrupt
+	EIMSK |= (1<<INT0);
+
+	sei();
+
+	while(1);
+}

@@ -1,0 +1,30 @@
+Code:
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+ISR(TIMER1_COMPA_vect){
+	//toggle LED
+	PORTB ^= (1<<PB5);
+}
+
+int main(void)
+{
+	DDRB |= (1<<PB5);
+
+	//Timer 1 CTC Mode 4
+	TCCR1A = 0;
+	TCCR1B = (1<<WGM12);
+
+	// Prescaler 1024
+	TCCR1B |= (1<<CS12) | (1<<CS10);
+
+	//Set timeout
+	OCR1A = 2*5859; //led is on for 0.75adjust by multipling or dividing, 
+
+	//Enable interrupts
+	TIMSK1 |= (1<<OCIE1A);
+
+	sei();
+
+	while(1);
+}

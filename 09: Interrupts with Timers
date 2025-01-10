@@ -61,11 +61,12 @@ int main(void) {
     TCCR1B |= (1 << CS12) | (1 << CS10);
 
     // Set Timer1 Compare Match A value for 1000 ms timeout
+	//OCR1A is for HIGH
     OCR1A = 1171;  // Corresponds to ~1000 ms at 16 MHz clock with 1024 prescaler
-
+	//OCR1B is for LOW
     // Set Timer1 Compare Match B value for 100 ms timeout
     OCR1B = 11720;   // Corresponds to ~100 ms at 16 MHz clock with 1024 prescaler
-
+	//BUt total is 65 000, So only on for 11720 - 1171 = 
     // Enable Timer1 Compare Match A and B interrupts
     TIMSK1 |= (1 << OCIE1A) | (1 << OCIE1B);
 

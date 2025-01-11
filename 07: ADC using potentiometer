@@ -36,3 +36,55 @@ int main(void)
 
     return 0;
 }
+
+
+
+This code has the same set up and does the same thing but uses interrupts:
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+ISR(ADC_vect) {
+	uint16_t adc_value = ADCH; // Read 8bit ADC value
+    	if (adc_value < 128) {
+            	PORTB |= (1<<PB1); // Turn on PB1
+    	} else {
+            	PORTB &= ~(1<<PB1); // Turn off PB1
+    	}
+}
+
+
+void adc_init(void){
+
+	ADMUX = (1<<REFS0); // Use AVcc as voltage reference
+
+    	ADMUX |= (1<<ADLAR); // Left-adjust the ADC result
+    	ADMUX |= (1<<MUX0); // Select ADC1 as input
+
+    	// Set ADC prescaler to 128
+    	ADCSRA = (1<<ADPS0) | (1<<ADPS1) | (1<<ADPS2);
+	
+	//Enable the ADC interrupt
+	ADCSRA |= (1<<ADIE);
+	//generate interrupt when adc conversion is complete
+	ADCSRA |= (1<<ADATE);
+    	// Enable ADC
+    	ADCSRA |= (1<<ADEN);
+
+	//Start conversion
+	ADCSRA |= (1<<ADSC);
+
+
+}
+
+int main(void)
+{
+    	// Configure PB1 as output
+    	DDRB = (1<<PB1);
+	adc_init();
+	
+	sei();
+    	while (1){
+	}
+
+    	return 0;
+}

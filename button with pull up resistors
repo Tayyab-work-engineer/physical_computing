@@ -1,26 +1,70 @@
 Code for making button using pull up resistor
 #include <avr/io.h>
 
-int main(void){
-    DDRB = 0b00100000; //set portb pin 5(digital pin 13) as outpt
-    PORTB = 0b00000000; // set pin 5 value
 
-    DDRD = 0b00000000; //set portd pins as input
-    PORTD = 0b11111111; // set all 1 to make pull up
+int main(void){
+    DDRB = 0b00100001; //set port b pin 5 as output
+    PORTB = 0b00000000;
     
-    while (1){
-        if (PIND & 0b10000000){
+    DDRD = 0b00000000; //set portd all pins as inputs
+    PORTD = 0b11111111; //set all high for pull up
+    //make loop
+    while(1){
+        if (PIND & 0b00000100) {
+            PORTB = 0b00000001;
+            
+            
+        } else {
             PORTB = 0b00100000;
             
         }
-        else{
-            PORTB = 0b00000000;
-        }
     }
-    
-    
     return 0;
 }
 
+
+
 set up
-see image called button
+see image called button, But in the picture the its connected to PD7 
+however it should be connected to PD2.
+
+Using Interrupts with the same circuit.
+
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
+
+ISR(INT0_vect) {
+    _delay_ms(50); // Debounce delay
+    if (!(PIND & (1 << PD2))) { // Check if the button is still pressed
+        PORTB ^= (1 << PB5);    // Toggle LED
+    }
+}
+
+int main(void){
+    DDRB = 0b00100001; //set port b pin 5 as output
+    PORTB = 0b00000000;
+    
+    DDRD = 0b00000000; //set portd all pins as inputs
+    PORTD = 0b11111111; //set all high for pull up
+    
+    //INT0 sense control
+    EICRA |= (1 << ISC01);  // Set ISC01
+    EICRA &= ~(1 << ISC00); // Clear ISC00
+    
+    //Enable interrupt
+    EIMSK |= (1<<INT0);
+    sei();
+    //make loop
+    while(1){
+        
+    }
+    return 0;
+}
+
+
+

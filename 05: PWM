@@ -1,4 +1,10 @@
 Code below and use pic 05 to see the circuit construction
+This program sets up Timer/Counter0 on an AVR microcontroller in Fast PWM mode to 
+generate a PWM signal on pin PD6 (OC0A).
+The timer runs in the background, incrementing its counter register (TCNT0) based on the 
+system clock and the configured prescaler.
+When the counter matches the value in the Output Compare Register (OCR0A), the hardware 
+toggles the output pin (PD6) according to the non-inverting mode configuration (COM0A1).
 
 
 #include <avr/io.h>

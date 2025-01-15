@@ -1,0 +1,51 @@
+Making Robotic Arm:
+
+I will be showing my journey in making a robotic arm. 
+
+0.  
+
+1. Make the robotic arm build, search youtube for videos.
+
+2. Make the code for moving one servo. Circuit picture 10.1
+Code:
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+#define SERVO_PERIOD_US 20000L  // Servo period in microseconds (20 ms)
+#define TIMER1_PRESCALER 8      // Prescaler value for Timer1
+#define F_CPU_MHZ (F_CPU / 1000000)  // CPU clock frequency in MHz
+
+
+void servo_init(void) {
+    DDRB |= (1 << PB1);  // Set PB1 as output
+    
+    ICR1 = F_CPU_MHZ * (SERVO_PERIOD_US / TIMER1_PRESCALER);
+
+    
+    TCCR1A = (1 << COM1A1); //Clear OC1A on compare match, non-inverting mode
+    
+    //Fast PWM
+    TCCR1A = TCCR1A | (1<<WGM11);
+    
+    TCCR1B = (1<<WGM12) | (1<<WGM13);
+    //set the clock and prescaling factor 8
+    TCCR1B = TCCR1B | (1<<CS11); //No Prescaling
+
+}
+
+int main(void) {
+    servo_init();
+    
+    OCR1A = 1000; //max 5000, min 1000, however when potentiometer there will be even less range due to gain error and offset error
+
+    while (1) {
+        // Main loop does nothing, waiting for ADC interrupt
+    }
+}
+
+2. Make the code for controlling one servo with potentiometer. Circuit picture 10.2
+Code:

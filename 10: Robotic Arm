@@ -47,5 +47,175 @@ int main(void) {
     }
 }
 
-2. Make the code for controlling one servo with potentiometer. Circuit picture 10.2
+2. Make the code for controlling one servo with potentiometer. Added two diodes of 100uF to the postive and ground of the servo and potentiometer to stop the jittering. 
+Circuit picture 10.2
 Code:
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+#define SERVO_PERIOD_US 20000L  // Servo period in microseconds (20 ms)
+#define TIMER1_PRESCALER 8      // Prescaler value for Timer1
+#define F_CPU_MHZ (F_CPU / 1000000)  // CPU clock frequency in MHz
+
+
+void servo_init(void) {
+    DDRB |= (1 << PB1);  // Set PB1 as output
+    
+    ICR1 = F_CPU_MHZ * (SERVO_PERIOD_US / TIMER1_PRESCALER);
+
+    
+    TCCR1A = (1 << COM1A1); //Clear OC1A on compare match, non-inverting mode
+    
+    //Fast PWM
+    TCCR1A = TCCR1A | (1<<WGM11);
+    
+    TCCR1B = (1<<WGM12) | (1<<WGM13);
+    //set the clock and prescaling factor 8
+    TCCR1B = TCCR1B | (1<<CS11); //No Prescaling
+}
+
+void adc_init(void) {
+    ADMUX = (1 << REFS0); // AVcc reference
+    
+    ADMUX |= (1<<ADLAR); // Left-adjust the ADC result
+    
+    ADMUX |= (1<<MUX0); // Select ADC1 as input
+    
+    // Set ADC prescaler to 128
+    ADCSRA = (1<<ADPS0) | (1<<ADPS1) | (1<<ADPS2);
+    
+    //Enable interrupt and auto trigger
+    ADCSRA |= (1 << ADIE);
+    ADCSRA |= (1 << ADATE);
+    
+    //Enable ADC
+    ADCSRA |= (1 << ADEN);
+    ADCSRA |= (1 << ADSC); // Start conversion
+    
+}
+
+ISR(ADC_vect) {
+    uint16_t adc_value = ADCH; // Read 8bit ADC value
+    //adc value between 0 to 255
+    //
+    if (adc_value >= 20 && adc_value <= 240) {
+        PORTB |= (1<<PB5); // Turn on PB5
+        adc_value = 17.39*adc_value+826.1;
+        OCR1A = adc_value;
+    }
+}
+
+
+int main(void) {
+    DDRB = (1<<PB5);
+
+    servo_init();
+    
+    adc_init();
+    sei();
+    
+
+    while (1) {
+        // Main loop does nothing, waiting for ADC interrupt
+    }
+    
+}
+
+3. Make the code for two servo and two potentiometers. Might need to add battery of 5V. Circuit on 10.3
+code
+
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+#define SERVO_PERIOD_US 20000L  // Servo period in microseconds (20 ms)
+#define TIMER1_PRESCALER 8      // Prescaler value for Timer1
+#define F_CPU_MHZ (F_CPU / 1000000)  // CPU clock frequency in MHz
+
+#define ADC_PIN0 0 // ADC channel for potentiometer 1
+#define ADC_PIN1 1 // ADC channel for potentiometer 2
+
+volatile uint16_t adc_value0 = 0; // Variable to store ADC value for potentiometer 1
+volatile uint16_t adc_value1 = 0; // Variable to store ADC value for potentiometer 2
+volatile uint8_t current_adc_channel = ADC_PIN0; // Track current ADC channel
+
+void servo_init(void) {
+    DDRB |= (1 << PB1);  // Set PB1 as output
+    DDRB |= (1 << PB2);  // Set PB2 as output
+
+    ICR1 = F_CPU_MHZ * (SERVO_PERIOD_US / TIMER1_PRESCALER);
+
+    
+    TCCR1A = (1 << COM1A1); //Clear OC1A on compare match, non-inverting mode
+    TCCR1A |= (1 << COM1B1); // Clear OC1B on compare match, non-inverting mode
+
+    //Fast PWM
+    TCCR1A = TCCR1A | (1<<WGM11);
+    TCCR1B = (1<<WGM12) | (1<<WGM13);
+    
+    //set the clock and prescaling factor 8
+    TCCR1B = TCCR1B | (1<<CS11); //No Prescaling
+}
+
+void adc_init(void) {
+    ADMUX = (1 << REFS0) | (ADC_PIN0 & 0x0F); // AVcc reference
+    
+    ADMUX |= (1<<ADLAR); // Left-adjust the ADC result
+    
+    // Set ADC prescaler to 128
+    ADCSRA = (1<<ADPS0) | (1<<ADPS1) | (1<<ADPS2);
+    
+    //Enable interrupt and auto trigger
+    ADCSRA |= (1 << ADIE);
+    ADCSRA |= (1 << ADATE);
+    
+    //Enable ADC
+    ADCSRA |= (1 << ADEN);
+    ADCSRA |= (1 << ADSC); // Start conversion
+    
+}
+
+ISR(ADC_vect) {
+    if (current_adc_channel == ADC_PIN0) {
+        adc_value0 = ADCH; // Read ADC value for potentiometer 1
+        ADMUX = (ADMUX & 0xF0) | (ADC_PIN1 & 0x0F); // Switch to ADC channel 1
+        current_adc_channel = ADC_PIN1;
+    } else {
+        adc_value1 = ADCH; // Read ADC value for potentiometer 2
+        ADMUX = (ADMUX & 0xF0) | (ADC_PIN0 & 0x0F); // Switch to ADC channel 0
+        current_adc_channel = ADC_PIN0;
+    }
+
+    if (adc_value0 >= 20 && adc_value0 <= 240 && adc_value1 >= 20 && adc_value1 <= 240) {
+            uint16_t pulse_width0 = (uint16_t)(17.39 * adc_value0 + 826.1); // Servo 1 pulse width
+            uint16_t pulse_width1 = (uint16_t)(17.39 * adc_value1 + 826.1); // Servo 2 pulse width
+
+            OCR1A = pulse_width0; // Set pulse width for servo on OC1A
+            OCR1B = pulse_width1; // Set pulse width for servo on OC1B
+        }
+
+}
+
+
+int main(void) {
+
+    servo_init();
+    
+    adc_init();
+    sei();
+    
+
+    while (1) {
+        // Main loop does nothing, waiting for ADC interrupt
+    }
+    
+}
+
+

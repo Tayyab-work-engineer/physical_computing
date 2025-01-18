@@ -218,4 +218,60 @@ int main(void) {
     
 }
 
+4.  Make the claw, I did this independently and later I will added it to my main build. The circuit on 10.4
+Code:
+
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+#define ADC_PIN 2
+
+
+void adc_init(void) {
+    ADMUX = (1 << REFS0) | (ADC_PIN & 0x0F); // AVcc reference, select ADC channel
+    ADCSRA = (1 << ADEN) | (1 << ADIE) | (1 << ADATE) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Enable ADC, enable interrupt, auto trigger, prescaler 128
+    ADCSRA |= (1 << ADSC); // Start conversion
+}
+
+void servo_init(void) {
+    DDRB |= (1 << PB1) | (1 << PB2); // Set PB1 and PB2 as outputs
+    ICR1 = 20000; // Set TOP value for 20ms period (50Hz)
+
+    // Timer/Counter1 Control Registers
+    TCCR1A = (1 << COM1A1) | (1 << COM1B1) | (1 << WGM11); // Clear OC1A and OC1B on compare match, mode 14 (Fast PWM)
+    TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS11); // Mode 14 (Fast PWM), prescaler 8
+
+    // Set initial position for "open claw"
+    OCR1A = 1000; // Servo 1 fully open
+    OCR1B = 2000; // Servo 2 fully open (inverted direction)
+}
+
+ISR(ADC_vect) {
+    uint16_t adc_value = ADC; // Read ADC value (0-1023)
+    
+    // Map ADC value (0-1023) to servo pulse width (1000-2000)
+    
+    uint16_t pulse_width1 = 1000 + (adc_value * 1000L) / 1023; // Servo 1
+    uint16_t pulse_width2 = 2000 - (adc_value * 1000L) / 1023; // Servo 2 (inverted direction)
+    
+    if (pulse_width1 < 1200) pulse_width1 = 1100; // Minimum for Servo 1
+    if (pulse_width2 > 1900) pulse_width2 = 1900; // Maximum for Servo 2
+
+    OCR1A = pulse_width1; // Control Servo 1
+    OCR1B = pulse_width2; // Control Servo 2
+}
+
+int main(void) {
+    servo_init();
+    adc_init();
+    sei(); // Enable global interrupts
+
+    while (1) {
+        // Main loop does nothing, waiting for ADC interrupt
+    }
+}
 

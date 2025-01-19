@@ -306,3 +306,114 @@ int main(void){
     }
     return 0;
 }
+
+6. Put everything together. Circuit 10.6
+
+code:
+
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+#define ADC_PIN 2
+#define ADC_PIN0 0 // ADC channel for potentiometer 1
+#define ADC_PIN1 1 // ADC channel for potentiometer 2
+
+volatile uint16_t claw = 0;
+volatile uint16_t adc_value0 = 0; // Variable to store ADC value for potentiometer 1
+volatile uint16_t adc_value1 = 0; // Variable to store ADC value for potentiometer 2
+volatile uint8_t current_adc_channel = ADC_PIN0; // Track current ADC channel
+
+
+void adc_init(void) {
+    ADMUX = (1 << REFS0) | (1 << ADLAR) | (ADC_PIN & 0x0F); // AVcc reference, select ADC channel
+    ADCSRA = (1 << ADEN) | (1 << ADIE) | (1 << ADATE) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Enable ADC, enable interrupt, auto trigger, prescaler 128
+    ADCSRA |= (1 << ADSC); // Start conversion
+}
+void servo_init(void) {
+    DDRB |= (1 << PB1) | (1 << PB2); // Set PB1 and PB2 as outputs
+    ICR1 = 20000; // Set TOP value for 20ms period (50Hz)
+
+    // Timer/Counter1 Control Registers
+    TCCR1A = (1 << COM1A1) | (1 << COM1B1) | (1 << WGM11); // Clear OC1A and OC1B on compare match, mode 14 (Fast PWM)
+    TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS11); // Mode 14 (Fast PWM), prescaler 8
+
+    // Set initial position for "open claw"
+    //OCR1A = 1000; // Servo 1 fully open
+    //OCR1B = 2000; // Servo 2 fully open (inverted direction)
+}
+
+ISR(ADC_vect) {
+    if (claw == 1) {
+        uint8_t adc_value = ADCH; // Read left-adjusted 8-bit ADC value (0-255)
+
+        // Map ADC value (0–255) to servo pulse width (1000–2000)
+        uint16_t pulse_width1 = 1000 + ((adc_value * 1000L) / 255); // Servo 1
+        uint16_t pulse_width2 = 2000 - ((adc_value * 1000L) / 255); // Servo 2 (inverted direction)
+
+        // Apply limits to ensure safe servo operation
+        if (pulse_width1 < 1100) pulse_width1 = 1100; // Minimum for Servo 1
+        if (pulse_width1 > 2000) pulse_width1 = 2000; // Maximum for Servo 1
+        if (pulse_width2 < 1000) pulse_width2 = 1000; // Minimum for Servo 2
+        if (pulse_width2 > 1900) pulse_width2 = 1900; // Maximum for Servo 2
+
+        OCR1A = pulse_width1; // Control Servo 1
+        OCR1B = pulse_width2; // Control Servo 2
+    }
+    else if(claw == 0){
+        if (current_adc_channel == ADC_PIN0) {
+            adc_value0 = ADCH; // Read ADC value for potentiometer 1
+            ADMUX = (ADMUX & 0xF0) | (ADC_PIN1 & 0x0F); // Switch to ADC channel 1
+            current_adc_channel = ADC_PIN1;
+        } else {
+            adc_value1 = ADCH; // Read ADC value for potentiometer 2
+            ADMUX = (ADMUX & 0xF0) | (ADC_PIN0 & 0x0F); // Switch to ADC channel 0
+            current_adc_channel = ADC_PIN0;
+        }
+
+        if (adc_value0 >= 20 && adc_value0 <= 240 && adc_value1 >= 20 && adc_value1 <= 240) {
+            
+            uint16_t pulse_width0 = (uint16_t)(17.39 * adc_value0 + 826.1); // Servo 1 pulse width
+            uint16_t pulse_width1 = (uint16_t)(17.39 * adc_value1 + 826.1); // Servo 2 pulse width
+
+            OCR1A = pulse_width0; // Set pulse width for servo on OC1A
+            OCR1B = pulse_width1; // Set pulse width for servo on OC1B
+        }
+
+        
+        
+        
+    }
+}
+
+
+int main(void){
+    DDRD = 0b00000000; //set portd as input
+    PORTD = 0b11111111; // pull up resistor
+    
+    servo_init();
+    adc_init();
+    sei(); // Enable global interrupts
+
+
+    while (1) {
+        if (PIND & 0b10000000) {
+            // PD7 is high, turn PB5 off
+            claw = 1;             //claw on
+            
+        } else if (PIND & 0b01000000) {
+            claw = 0;           // claw off
+
+
+        }
+        
+    }
+    
+
+    return 0;
+}
+
+

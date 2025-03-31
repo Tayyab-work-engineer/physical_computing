@@ -2,9 +2,9 @@ This lesson I experimented with buttons, using them to make LEDs flash. Check pi
 how to construct the circuit.
 
 Before I built the circuit, I used another circuit and code to see if I can get the button to turn the LED. 
-This is the code and to construct the circuit is very easy. check picture 02b.
+check picture 02b.
+Code:
 #include <avr/io.h>
-#include <avr/interrupt.h>
 
 int main(void){
     DDRB = 0b00100000; //set pin 5 as output
@@ -24,7 +24,26 @@ int main(void){
     return 0;
 }
 
-Code
+code with arduino ide:
+void setup() {
+  pinMode(13, OUTPUT);  // Set pin 13 as an output (for an LED or other device)
+  digitalWrite(13, LOW); // Ensure the output starts in the LOW state
+
+  pinMode(10, INPUT_PULLUP);  // Set pin 10 as an input with an internal pull-up resistor
+  // This means pin 10 will normally be HIGH unless connected to GND.
+}
+
+void loop() {
+  if (digitalRead(10) == LOW) { // If button or switch connected to pin 10 is pressed (pulled LOW)
+    digitalWrite(13, HIGH);  // Turn ON the LED (or activate output on pin 13)
+  } else {
+    digitalWrite(13, LOW);   // Turn OFF the LED (or deactivate output on pin 13)
+  }
+}
+
+
+Advance led button circuit:
+Ciruit 02 Lesson.jpeg
 #include <avr/io.h>
 
 #ifndef F_CPU
@@ -32,7 +51,6 @@ Code
 #endif
 #include <util/delay.h>
 
-#include <avr/interrupt.h>
 
 int main(void){
     DDRB = 0b00100000; //set pin 5 as output
@@ -56,4 +74,28 @@ int main(void){
 
     }
     return 0;
+}
+
+using mkr
+
+void setup() {
+  pinMode(9, OUTPUT);  
+  digitalWrite(9, LOW); // Ensure the output starts in the LOW state
+
+  pinMode(8, OUTPUT); 
+  digitalWrite(8, LOW); // Ensure the output starts in the LOW state
+
+  pinMode(10, INPUT_PULLUP);  // Set pin 10 as an input with an internal pull-up resistor
+  // This means pin 10 will normally be HIGH unless connected to GND.
+}
+
+void loop() {
+  if (digitalRead(10) == LOW) { // If button or switch connected to pin 10 is pressed (pulled LOW)
+    digitalWrite(9, HIGH);  
+    digitalWrite(8, LOW); 
+  } else {
+    digitalWrite(9, LOW);  
+    digitalWrite(8, HIGH); 
+
+  }
 }

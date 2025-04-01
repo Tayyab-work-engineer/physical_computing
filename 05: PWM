@@ -35,3 +35,23 @@ int main()
 	return 0;
 }
 
+for mkr
+void setup() {
+  pinMode(9, OUTPUT);  // Yellow LED
+  pinMode(8, OUTPUT);  // Red LED
+  digitalWrite(9, LOW); // Start with LEDs OFF
+  digitalWrite(8, LOW);
+
+}
+
+void loop() {
+  for (int i = 255; i >= 0; i -= 5) {
+    analogWrite(9, i); // Gradually increase brightness
+    delay(20);
+  }
+  for (int i = 255; i >= 0; i -= 5) {
+    analogWrite(8, i); // Gradually decrease brightness
+    delay(20);
+  }
+}
+

@@ -245,3 +245,38 @@ int main(void) {
 	return 0;
 }
 
+Receive and Transmit using mkr
+void setup() {
+  pinMode(9, OUTPUT);  // Yellow LED
+  pinMode(8, OUTPUT);  // Red LED
+  digitalWrite(9, LOW); // Start with LEDs OFF
+  digitalWrite(8, LOW);
+
+  Serial.begin(9600); // Start UART communication at 9600 baud
+}
+
+void loop() {
+  if (Serial.available()) { // Check if data is received
+    char c = Serial.read(); // Read the received character
+
+    if (c >= 'A' && c <= 'Z') {
+      c += 32;  // Convert uppercase to lowercase
+
+      digitalWrite(9, HIGH); // Turn ON Yellow LED
+      digitalWrite(8, LOW);  // Turn OFF Red LED
+    } 
+    else if (c >= 'a' && c <= 'z') {
+      c -= 32;  // Convert lowercase to uppercase
+      digitalWrite(9, LOW);  // Turn OFF Yellow LED
+      digitalWrite(8, HIGH); // Turn ON Red LED
+    } 
+    else {
+      c = '\n'; // If not a letter, send a newline
+      digitalWrite(9, LOW);  // Turn OFF both LEDs
+      digitalWrite(8, LOW);
+    }
+
+    Serial.write(c); // Send back the converted character
+  }
+}
+

@@ -46,6 +46,41 @@ int main(void) {
 }
 
 for transmitting data on mkr
+int count = 0; // Counter to track the number of 'A' sent
+
+void setup() {
+  pinMode(9, OUTPUT);  
+  digitalWrite(9, LOW); // Ensure the output starts in the LOW state
+
+  pinMode(8, OUTPUT); 
+  digitalWrite(8, LOW); // Ensure the output starts in the LOW state
+
+  pinMode(10, INPUT_PULLUP);  // Set pin 10 as an input with an internal pull-up resistor
+  // This means pin 10 will normally be HIGH unless connected to GND.
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (digitalRead(10) == LOW) { // If button is pressed
+    digitalWrite(9, HIGH);  
+    digitalWrite(8, LOW);
+    delay(200);
+  } else {
+    Serial.write('A');
+    count++;
+    digitalWrite(9, LOW);  
+    digitalWrite(8, HIGH);
+    
+    if (count >= 10) { // Reset Serial Monitor after 10 'A'
+      Serial.end();
+      delay(500); // Short delay before restarting
+      Serial.begin(9600);
+      count = 0; // Reset counter
+    }
+    delay(200); // Simple debounce delay
+  }
+}
 
 
 

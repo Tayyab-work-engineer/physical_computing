@@ -45,6 +45,11 @@ int main(void) {
 	return 0;
 }
 
+for transmitting data on mkr
+
+
+
+
 
 For recieving data,
 
@@ -109,6 +114,39 @@ int main(void) {
 
 	return 0;
 }
+
+
+For receiving on mkr,
+void setup() {
+  pinMode(9, OUTPUT);  // Yellow LED
+  pinMode(8, OUTPUT);  // Red LED
+  digitalWrite(9, LOW); // Start with LEDs OFF
+  digitalWrite(8, LOW);
+
+  Serial.begin(9600); // Start UART communication at 9600 baud
+}
+
+void loop() {
+  if (Serial.available()) { // Check if data is received
+    char c = Serial.read(); // Read the received character
+
+    if (c == 'y') {
+      digitalWrite(9, HIGH); // Turn ON Yellow LED
+      digitalWrite(8, LOW);  // Turn OFF Red LED
+    } 
+    else if (c == 'r') {
+      digitalWrite(9, LOW);  // Turn OFF Yellow LED
+      digitalWrite(8, HIGH); // Turn ON Red LED
+    } 
+    else {
+      digitalWrite(9, LOW);  // Turn OFF both LEDs
+      digitalWrite(8, LOW);
+    }
+  }
+}
+
+
+
 
 
 for receiving and sending data,

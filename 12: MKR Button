@@ -1,0 +1,25 @@
+Circuit: 12 MKR_button.jpg
+
+
+Arduino IDE
+
+#define red_led 9
+#define button 10 
+
+void setup() {
+  pinMode(red_led, OUTPUT);
+  digitalWrite(red_led, LOW);
+
+  pinMode(button, INPUT_PULLUP);// Set pin 10 as an input with an internal pull-up resistor
+  // This means pin 10 will normally be HIGH unless connected to GND.
+
+}
+
+void loop() {
+  if (digitalRead(button) == LOW) {
+    digitalWrite(red_led, HIGH);
+  }else{
+    digitalWrite(red_led,LOW);
+  }
+}
+

@@ -1,0 +1,17 @@
+Circuit Build: 15: PWM Servo.jpeg
+
+Code:
+#define red_led 10
+#define yellow_led 8
+
+void setup() {
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  int sensorValue = analogRead(A0);
+
+  Serial.println(sensorValue);
+  delay(1);
+}

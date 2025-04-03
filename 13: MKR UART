@@ -32,3 +32,41 @@ void loop() {
 
 Picture of circuit: 13: MKR_UART.jpeg
 For Receiving data:
+#define red_led 10
+#define yellow_led 9
+
+void setup() {
+  pinMode(red_led, OUTPUT);
+  digitalWrite(red_led, LOW);
+
+  pinMode(yellow_led, OUTPUT);
+  digitalWrite(yellow_led, LOW);
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (Serial.available()){
+    char c = Serial.read();
+
+    if (c == 'r'){
+      digitalWrite(red_led,HIGH);
+      delay(250);
+    }else if(c == 'y'){
+      digitalWrite(yellow_led,HIGH);
+      delay(250);
+
+
+    }else{
+      digitalWrite(yellow_led,LOW);
+      digitalWrite(red_led,LOW);
+
+
+    }   
+  }
+}
+
+
+Transmitting and Receiving:
+Circuit is the same as before:
+Code:

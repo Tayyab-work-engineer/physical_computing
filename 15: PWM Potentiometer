@@ -1,4 +1,4 @@
-Circuit Build: 15: PWM Servo.jpeg
+Circuit Build: 15: PWM Potentiometer.jpeg
 
 Code:
 #define red_led 10

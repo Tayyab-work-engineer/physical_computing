@@ -1,0 +1,26 @@
+Circuit is space as the MKR_button.jpeg
+
+Code for MKR
+#define red_led 10
+#define yellow_led 9
+
+void setup() {
+  pinMode(red_led, OUTPUT);
+  digitalWrite(red_led, LOW);
+
+  pinMode(yellow_led, OUTPUT);
+  digitalWrite(yellow_led, LOW);
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  for (int i = 255; i>=0; i-=1){
+    analogWrite(red_led,i);
+    delay(20);
+  }
+  for (int i = 255; i>=0; i-=1){
+    analogWrite(yellow_led,i);
+    delay(20);
+  }
+}

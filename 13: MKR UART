@@ -1,0 +1,34 @@
+For this project I will be making the arduino transmit and receive data on the arduino ide using the arduino mkr.
+
+
+The circuit is the same from before(MKR_button.jpeg)
+Transmitting Code:
+#define red_led 9
+#define button 10 
+
+void setup() {
+  pinMode(red_led, OUTPUT);
+  digitalWrite(red_led, LOW);
+
+  pinMode(button, INPUT_PULLUP);
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (digitalRead(button) == HIGH){
+    Serial.write('r');
+    digitalWrite(red_led,HIGH);
+    delay(250);
+
+  }else{
+    digitalWrite(red_led,LOW);
+
+    
+  }
+
+}
+
+
+Picture of circuit: 13: MKR_UART.jpeg
+For Receiving data:

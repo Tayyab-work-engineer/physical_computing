@@ -1,0 +1,43 @@
+Thing                             | Old Setup                 | New Setup
+Button pin                        | Pin 2 (not mapped to EIC) | Pin 0, 1, 4, 5, 6, 7, 8, or 9 (yes, mapped!)
+Why button interrupt didn't work  | No EIC mapping            | Correct EIC mapping = it will work
+
+
+Circuit is on 17:MKR Hardware Interrupt.jpeg
+
+Code:
+int redLED = 3;
+int blueLED = 4;
+
+int buttonPin = 0;
+
+volatile int buttonState;
+
+void buttonInterrupt() {
+  buttonState = digitalRead(buttonPin);
+
+  if (buttonState == LOW) {
+    digitalWrite(blueLED, HIGH);
+  }
+
+  if (buttonState == HIGH) {
+    digitalWrite(blueLED, LOW);
+  }
+}
+
+void setup() {
+  pinMode(redLED, OUTPUT);
+  pinMode(blueLED, OUTPUT);
+
+  digitalWrite(redLED, LOW);
+
+  pinMode(buttonPin, INPUT_PULLUP); // internal pullup
+  attachInterrupt(digitalPinToInterrupt(buttonPin), buttonInterrupt, CHANGE);
+}
+
+void loop() {
+  digitalWrite(redLED, HIGH);
+  delay(250);
+  digitalWrite(redLED, LOW);
+  delay(250);
+}

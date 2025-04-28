@@ -1,0 +1,27 @@
+Today we will experiment with controling a servo from a potentiometer using the mkr arduino.
+To make the circuit you will need a power supply of 5V ONLY for the servo. Not the arduino.
+Make sure to connect all the grounds together. 
+The circuit picture: 16: servo pwm.jpeg
+I used arduino uno to get the 5V. Use pin 7 to control the servo as there are only some pins
+that allow pwm.
+
+Code:
+#include <Servo.h>
+
+Servo myServo;
+
+void setup() {
+  myServo.attach(7);  // Attach servo to pin 
+  Serial.begin(9600);
+
+}
+
+void loop() {
+  int sensorValue = analogRead(A0);  // Read sensor value from A0
+  int angle = map(sensorValue, 0, 1023, 0, 180);  // Map the sensor value to an angle
+
+  Serial.println(angle);        // Print the sensor value for debugging
+  myServo.write(angle);  // Move servo to the corresponding angle
+  delay(20);
+
+}

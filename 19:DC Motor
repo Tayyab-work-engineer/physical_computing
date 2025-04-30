@@ -1,0 +1,26 @@
+I used thinkercad to make the circuit
+Circuit: 19-DC Motor.jpeg
+
+Code:
+// C++ code
+
+const int motorpin = 9;
+const int potpin = A0;
+
+int pot;
+int speed;
+
+void setup(){
+
+  
+}
+
+void loop(){
+  //read potentiometer 0 - 1023
+  pot = analogRead(potpin);
+  
+  //convert to 0-255
+  speed = map(pot,0,1023,0,255);
+  //set motor speed
+  analogWrite(motorpin,speed);
+}

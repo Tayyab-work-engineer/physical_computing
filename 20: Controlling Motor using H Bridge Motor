@@ -1,0 +1,49 @@
+
+Circuit: 20-HbridgeButton motor.png
+
+Code turning motor depending on button pressed:
+// C++ code
+//
+
+const int forwardPin = 8;
+const int backwardPin = 12;
+const int delayTime = 2000;
+const int button1 = 7;
+const int button2 = 2;
+
+void setup()
+{
+  pinMode(forwardPin,OUTPUT);
+  pinMode(backwardPin,OUTPUT);
+  pinMode(button1,INPUT_PULLUP);
+  pinMode(button2,INPUT_PULLUP);
+
+}
+
+void loop()
+{
+  
+  if (digitalRead(button1) == LOW) {
+  	//spin forward
+  	digitalWrite(forwardPin,HIGH);
+  }else{
+  	//stop
+  	digitalWrite(forwardPin,LOW);
+  }
+  if (digitalRead(button2) == LOW) {
+  	//spin backward
+  	digitalWrite(backwardPin,HIGH);
+  }else{
+  	//stop
+  	digitalWrite(backwardPin,LOW);
+  }
+
+}
+
+
+
+
+
+Circuit: 20-hbridge_pwm_motor.png
+
+Code for controlling speed of motor:

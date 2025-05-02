@@ -1,0 +1,156 @@
+
+Circuit: 21 -Transmitter with Arduino.png
+
+
+First we will see how to get the data from the transmittor, You just need to connect the transmittor to the arduino and power and ground.
+Code:
+const int receiver_pin = 2;//transmittor connect to pin 2
+unsigned long pulse_duration;
+
+void setup(){
+  pinMode(receiver_pin,INPUT);
+  Serial.begin(9600);
+
+  }
+void loop(){
+  pulse_duration = pulseIn(receiver_pin,HIGH);
+  Serial.println(pulse_duration);
+
+  }
+
+The output should be 
+from 990 to 1990
+
+
+
+
+Code to control the different LED with RC transmittor.
+const int left_pin = 12;
+const int right_pin = 13;
+unsigned long left_pulse;
+unsigned long right_pulse;
+
+// Left LEDs
+const int Lled1 = 2;
+const int Lled2 = 3;
+const int Lled3 = 4;
+const int Lled4 = 5;
+const int Lled5 = 6;
+
+// Right LEDs
+const int Rled1 = 7;
+const int Rled2 = 8;
+const int Rled3 = 9;
+const int Rled4 = 10;
+const int Rled5 = 11;
+
+// Threshold values for left side
+const int Lfwd = 1990;
+const int Lbck = 990;
+const int Ldelta = (Lfwd - Lbck) / 5;
+
+const int Lthresh1 = Lbck;
+const int Lthresh2 = Lthresh1 + Ldelta;
+const int Lthresh3 = Lthresh2 + Ldelta;
+const int Lthresh4 = Lthresh3 + Ldelta;
+const int Lthresh5 = Lthresh4 + Ldelta;
+
+// Threshold values for right side (note: fwd and bck are flipped)
+const int Rfwd = 990;
+const int Rbck = 1990;
+const int Rdelta = (Rbck - Rfwd) / 5;
+
+const int Rthresh1 = Rbck;
+const int Rthresh2 = Rthresh1 - Rdelta;
+const int Rthresh3 = Rthresh2 - Rdelta;
+const int Rthresh4 = Rthresh3 - Rdelta;
+const int Rthresh5 = Rthresh4 - Rdelta;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(left_pin, INPUT);
+  pinMode(right_pin, INPUT);
+
+  // Set LED pins as output
+  for (int i = 2; i <= 11; i++) {
+    pinMode(i, OUTPUT);
+  }
+}
+
+void loop() {
+  left_pulse = pulseIn(left_pin, HIGH);
+  right_pulse = pulseIn(right_pin, HIGH);
+
+  Serial.print("Left: ");
+  Serial.print(left_pulse);
+  Serial.print(" | Right: ");
+  Serial.println(right_pulse);
+
+  // Update left LEDs
+  if (left_pulse > Lthresh5) {
+    digitalWrite(Lled5, HIGH);
+    digitalWrite(Lled4, LOW);
+    digitalWrite(Lled3, LOW);
+    digitalWrite(Lled2, LOW);
+    digitalWrite(Lled1, LOW);
+  } else if (left_pulse > Lthresh4) {
+    digitalWrite(Lled5, LOW);
+    digitalWrite(Lled4, HIGH);
+    digitalWrite(Lled3, LOW);
+    digitalWrite(Lled2, LOW);
+    digitalWrite(Lled1, LOW);
+  } else if (left_pulse > Lthresh3) {
+    digitalWrite(Lled5, LOW);
+    digitalWrite(Lled4, LOW);
+    digitalWrite(Lled3, HIGH);
+    digitalWrite(Lled2, LOW);
+    digitalWrite(Lled1, LOW);
+  } else if (left_pulse > Lthresh2) {
+    digitalWrite(Lled5, LOW);
+    digitalWrite(Lled4, LOW);
+    digitalWrite(Lled3, LOW);
+    digitalWrite(Lled2, HIGH);
+    digitalWrite(Lled1, LOW);
+  } else {
+    digitalWrite(Lled5, LOW);
+    digitalWrite(Lled4, LOW);
+    digitalWrite(Lled3, LOW);
+    digitalWrite(Lled2, LOW);
+    digitalWrite(Lled1, HIGH);
+  }
+
+  // Update right LEDs
+  if (right_pulse < Rthresh5) {
+    digitalWrite(Rled5, HIGH);
+    digitalWrite(Rled4, LOW);
+    digitalWrite(Rled3, LOW);
+    digitalWrite(Rled2, LOW);
+    digitalWrite(Rled1, LOW);
+  } else if (right_pulse < Rthresh4) {
+    digitalWrite(Rled5, LOW);
+    digitalWrite(Rled4, HIGH);
+    digitalWrite(Rled3, LOW);
+    digitalWrite(Rled2, LOW);
+    digitalWrite(Rled1, LOW);
+  } else if (right_pulse < Rthresh3) {
+    digitalWrite(Rled5, LOW);
+    digitalWrite(Rled4, LOW);
+    digitalWrite(Rled3, HIGH);
+    digitalWrite(Rled2, LOW);
+    digitalWrite(Rled1, LOW);
+  } else if (right_pulse < Rthresh2) {
+    digitalWrite(Rled5, LOW);
+    digitalWrite(Rled4, LOW);
+    digitalWrite(Rled3, LOW);
+    digitalWrite(Rled2, HIGH);
+    digitalWrite(Rled1, LOW);
+  } else {
+    digitalWrite(Rled5, LOW);
+    digitalWrite(Rled4, LOW);
+    digitalWrite(Rled3, LOW);
+    digitalWrite(Rled2, LOW);
+    digitalWrite(Rled1, HIGH);
+  }
+
+  delay(100);  // Slight delay for stability
+}

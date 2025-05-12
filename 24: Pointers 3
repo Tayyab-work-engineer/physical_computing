@@ -1,1 +1,37 @@
-Dynamic memory allocation with malloc(), calloc(), realloc(), and deallocation with free().
+Dynamic memory allocation
+allocating memory at the runtime of a program.
+Use? One you declare an array, and its size then you cannot change it. However,
+Sometimes the size of the array you declared may be insufficient. To solve this issue, you can
+allocate memory manually during run-time.
+
+
+malloc()
+Stands for memory allocation. This reserves a block of memory of a specified number of bytes.
+And leaves the memory uninitialized
+ex;
+ptr = (float*) malloc(100 * sizeof(float));
+Size of float is 4 bytes. So allocates 400 bytes of memory. The pointer ptr holds the address of the
+first byte in the allocated memory.
+
+
+calloc()
+Stands for contiguous allocation. Allocates memory and initializes all bits to zero.
+ex: 
+ptr = (float*) calloc(25, sizeof(float));
+Allocates contiguous space in memory for 25 elements of type float.
+
+realloc()
+If the dynamically allocated memory is insufficient or more than required, 
+you can change the size of previously allocated memory using the realloc() function.
+ex;
+ptr = realloc(ptr, x);
+ptr is reallocated with a new size x.
+
+
+deallocation with free()
+Frees the space allocated in the memory.
+ex;
+free(ptr);
+
+Code:
+

@@ -1,1 +1,57 @@
-Pointer arithmetic, dereferencing, and accessing variable values via pointers.
+Pointer arithmetic
+a pointer ptr holds the address 1000 
+and we increment the pointer, then the pointer will be incremented 
+by 4 or 8 bytes (size of the integer), and the pointer will now hold the address 1004.
+
+ptr++; //1004
+ptr--; //1000
+
+what if? We can add integer values to Pointers and the pointer is adjusted based on the size of the data type it points to.
+ptr = ptr + 5; // 1000+ 5*4 = 1020
+
+
+dereferencing 
+string food = "Pizza";  // Variable declaration
+string* ptr = &food;    // Pointer declaration
+
+// Reference: Output the memory address of food with the pointer (0x6dfed4)
+cout << ptr << "\n";
+
+// Dereference: Output the value of food with the pointer (Pizza)
+cout << *ptr << "\n";
+
+
+
+accessing variable values via pointers.
+int a[10];
+int *pa;
+pa = &a[0];
+x = *pa; //copy what is in pa to x
+*(pa+1); //points to the next element in a. so a[1]
+
+ex : return length of string s
+
+#include <stdio.h>
+
+int string_len(char *s){
+    int n;
+    for(n=0; *s!='\0'; s++){
+        n++;
+    }
+
+    
+    return n;
+}
+
+int main(void){
+    char s[] = "Hello World!";
+    char *pc;
+    pc = s;
+    //*pc = s; WRONG
+
+    int n = string_len(pc);//call the function
+    printf("%d",n);
+    
+    return 0;
+    
+}

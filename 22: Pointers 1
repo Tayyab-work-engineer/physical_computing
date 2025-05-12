@@ -1,1 +1,51 @@
-Introduction to pointers — what they are, syntax, and why they’re used.
+Introduction to pointers — 
+
+what they are
+A pointer is a variable that contains the address of another variable
+
+syntax 
+int x,y;
+int *px;
+
+px = &x; //assigns the address of x to the variable px.
+y = *px; //de reference
+*px = 0; //value of x becomes 0
+
+
+
+why they’re used.
+1. used to alter variables in a function, ex. swap two variable
+#include <stdio.h>
+
+
+int swap(int *px,int *py){
+    
+    int temp;
+    
+    temp=*px;
+    *px = *py;
+    *py = temp;
+    
+    return 0;
+}
+
+int main(void){
+
+    int x=1,y=2;
+    int *px,*py;
+    
+    px = &x;
+    py = &y;
+    
+    printf("x = %d, y = %d\n",x,y);
+    swap(py,px);
+    printf("x = %d, y = %d\n",x,y);
+
+    
+    
+    return 0;
+    
+}
+
+
+2. 

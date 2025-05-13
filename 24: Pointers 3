@@ -1,6 +1,6 @@
 Dynamic memory allocation
 allocating memory at the runtime of a program.
-Use? One you declare an array, and its size then you cannot change it. However,
+Use? Once you declare an array, and its size then you cannot change it. However,
 Sometimes the size of the array you declared may be insufficient. To solve this issue, you can
 allocate memory manually during run-time.
 
@@ -69,4 +69,84 @@ int main() {
     
     return 0;
 }
+
+Challenge: 
+Create a pointer array like this:
+int* ages;
+
+Allocate 4 spaces for the array using the malloc() function.
+
+Get 4 input values for the array.
+
+Print the array elements using the pointer. (remember to free after)
+code:
+
+#include <stdio.h>
+#include <stdlib.h>
+
+
+int main() {
+    int *ages;
+    ages = (int*)malloc(4*sizeof(int));
+    
+    printf("Enter Values: \n");
+    for(int i=0;i<4;i++){
+        scanf("%d",ages+i);
+    }
+    
+    printf("Entered Values: \n");
+
+    for(int i=0;i<4;i++){
+        printf("%d\n",*(ages+i));//de reference
+    }
+    
+    free(ages);
+    return 0;
+}
+
+
+
+Now:
+
+Resize the array to store 6 elements using realloc().
+
+Assign 32 and 59 as the 5th and 6th elements:
+ages[4] = 32;
+ages[5] = 59;
+
+Then finally, print all 6 array elements.
+
+#include <stdio.h>
+#include <stdlib.h>
+
+
+int main() {
+    int *ages;
+    ages = (int*)malloc(4*sizeof(int));
+    
+    printf("Enter 4 ages: \n");
+    for(int i=0;i<4;i++){
+        scanf("%d",ages+i);
+    }
+    
+    printf("Entered ages: \n");
+
+    for(int i=0;i<4;i++){
+        printf("%d\n",*(ages+i));//de reference
+    }
+    
+    ages = realloc(ages,6);
+    ages[4] = 32;
+    ages[5] = 59;
+    printf("New ages added: \n");
+
+    for(int i=0;i<6;i++){
+        printf("%d\n",*(ages+i));//de reference
+    }
+    
+    free(ages);
+    return 0;
+}
+
+
 

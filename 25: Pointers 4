@@ -1,0 +1,53 @@
+Pointer to pointer:
+A pointer which points to another pointer.
+ex;
+int x=5;
+int *p;
+p=&x; //contains address of x
+
+int **q;
+q = &p; //points to address p
+
+Uses?
+They are used in the dynamic memory allocation of multidimensional arrays. (create dynamic 2D array)
+They can be used to store multilevel data such as the text document paragraph, sentences, and word semantics.
+They are used in data structures to directly manipulate the address of the nodes without copying.
+They can be used as function arguments to manipulate the address stored in the local pointer.
+
+
+
+void pointers:
+Is a pointer that has no associated data type with it.
+It can hold an address of any type and can be typecasted to any type.
+
+ex;
+int a = 10;
+char b = 'x';
+
+void *p = &a;
+p = &b;
+//printf("%c",*p); ERROR
+printf("%c",*(char*)p);
+
+Adv:
+1. malloc() and calloc() return void * type and this allows these functions to be used 
+to allocate memory of any data type (just because of void *).
+2. void pointers in C are used to implement generic functions in C. 
+For example, compare function which is used in qsort().
+
+
+
+
+pointer arrays:
+
+
+
+
+
+
+
+
+
+
+
+

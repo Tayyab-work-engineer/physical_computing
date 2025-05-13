@@ -39,6 +39,18 @@ For example, compare function which is used in qsort().
 
 
 pointer arrays:
+A pointer array is a homogeneous collection of indexed pointer variables that are 
+references to a memory location.
+Uses?
+When we want to point at multiple memory locations of a similar data type.
+Then we can access the data by dereferencing the pointer pointing to it.
+
+ex:
+int var1 = 10;
+int var2 = 20;
+int var3 = 30;
+
+int* ptr_arr[3] = { &var1, &var2, &var3 };
 
 
 

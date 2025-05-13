@@ -51,10 +51,30 @@ int var2 = 20;
 int var3 = 30;
 
 int* ptr_arr[3] = { &var1, &var2, &var3 };
+printf("%d\n",*ptr_arr[1]);
 
 
+Use for char:
+char *arr[5] = { "gfg", "geek", "Geek", "Geeks", "GeeksforGeeks" }
 
+Normally we predefine the size of array. This leaves some space as empty.
+char str[3][10] = { "Geek", "Geeks", "Geekfor" };
 
+We can use array to fix this
+ex:
+char* arr[] = { "geek", "Geeks", "Geeksfor" };
+// Print each string and its address
+for (int i = 0; i < 3; i++) {
+    printf("%s\n", arr[i]);
+}
+
+// Print addresses of each string
+for (int i = 0; i < 3; i++) {
+    printf("Address of arr[%d]: %p\n", i, (void*)arr[i]);
+}
+
+Here, the total memory used is the memory required for storing the strings and 
+pointers without leaving any empty space hence, saving a lot of wasted space
 
 
 

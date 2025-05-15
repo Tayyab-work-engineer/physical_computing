@@ -1,0 +1,118 @@
+Functions 
+What is a function? Block of code which only runs when it is called.
+example1:
+#include <stdio.h>
+#include <stdlib.h>
+
+int myFunction(int x, int y){
+    return x+y;
+}
+
+
+int main() {
+    int result;
+    result = myFunction(5,3);
+    
+    printf("5+3 = %d \n",result);
+    
+    
+    return 0;
+}
+
+Function and pointers
+You can pass addresses to functions using pointers. The changes made to the value in the address
+will be permanent. 
+Ex:
+#include <stdio.h>
+#include <stdlib.h>
+
+int myFunction(int *value){
+    *value = 5;
+    return *value;
+}
+
+
+int main() {
+    int value;
+    int *p_value;
+    p_value = &value;
+    
+    *p_value = 1; //make value 1
+    printf("%d \n",*p_value);
+
+    myFunction(p_value); //change the value
+    
+    printf("%d \n",*p_value); //new value
+    
+    
+    return 0;
+}
+
+
+Return Address
+
+#include <stdio.h>
+#include <stdlib.h>
+
+
+int *findSquare (int *number){
+    int square = *number * *number;
+    
+    *number = square;
+    
+    return number; //return address
+    
+    
+}
+
+
+int main() {
+    int number = 12;
+    int *p_number;
+    p_number = &number;
+    
+    int *result = findSquare(p_number);
+
+    printf("Result is %d", *result);
+    
+    return 0;
+}
+
+
+Challenge:
+1. Create a function that accepts three pointers.
+
+2. Inside the function, multiply values of two pointers and 
+assign the result to the address of the third pointer.
+
+3. Inside the main function, create three variables: two variables with values 13 and 9,
+and the third variable to store their product.
+
+4. Call the function with addresses of the three variables as arguments.
+
+5. Store the returned value inside a pointer and print the value pointed to by the returned address.
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int *multiply(int *x,int *y, int *number){
+    
+    *number = *x * *y;
+    
+    return number;
+    
+}
+
+int main() {
+
+    int x=13,y=9,number;
+    int *px,*py,*pnumber;
+    px = &x;
+    py = &y;
+    pnumber = &number;
+    
+    int *result = multiply(px,py,pnumber);
+    printf("5x7 = %d",*pnumber);
+    return 0;
+}
+

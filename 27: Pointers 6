@@ -1,0 +1,48 @@
+Arrays in C program
+An array stores values of the same data type into a single variable. Ex:
+int myNumbers[4] = {25, 50, 75, 100};
+
+You can loop through the array elements with a for loop:
+int myNumbers[4] = {25, 50, 75, 100};
+for (int i=0; i<4; i++){
+    printf("%d\n", myNumbers[i]);
+}
+
+
+Pointers and arrays — relationship
+How does this link with pointers? The array stores the variables together. Each with some
+distance apart. So for example, if value 25 is stored at 0x7ffe70f9d8f0, then the next value
+will be 4 distance apart, such as 0x7ffe70f9d8f4, and so on. 
+
+Ex:
+__________________________________________________________________
+int myNumbers[4] = {25, 50, 75, 100};
+
+// Get the memory address of the myNumbers array
+printf("%p\n", myNumbers); //0x7ffe70f9d8f0
+
+// Get the memory address of the first array element
+printf("%p\n", &myNumbers[0]); //0x7ffe70f9d8f0
+__________________________________________________________________
+
+To access the rest of the elements in myNumbers, 
+you can increment the pointer/array (+1, +2, etc):
+int myNumbers[4] = {25, 50, 75, 100};
+
+// Get the value of the second element in myNumbers
+printf("%d\n", *(myNumbers + 1)); //59
+
+// Get the value of the third element in myNumbers
+printf("%d", *(myNumbers + 2)); // 75
+
+// and so on..
+
+Practical examples.
+
+int myNumbers[4] = {25, 50, 75, 100};
+int *ptr = myNumbers;
+int i;
+
+for (i = 0; i < 4; i++) {
+  printf("%d\n", *(ptr + i));
+}

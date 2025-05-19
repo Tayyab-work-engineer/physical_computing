@@ -1,0 +1,42 @@
+🔧 Mini Project: Dynamic Array Operations Menu (Using Pointers)
+🧠 Objective:
+Create a menu-driven C program that lets the user manipulate an integer array using pointers. 
+The user can perform various operations dynamically:
+
+✅ Features to Implement:
+Insert a new element at a given index
+Delete an element at a given index
+Display the array
+Find the maximum and minimum values
+Reverse the array
+Calculate sum and average
+Exit the program
+
+🔗 Core Concepts You'll Use:
+Pointer arithmetic (*(ptr + i))
+Dynamic memory management (malloc, realloc, free)
+Passing arrays to functions via pointers
+Menu system using a while loop and switch-case
+
+ex:
+Enter the number of elements: 4
+Enter elements:
+1 3 5 7
+
+Choose an operation:
+1. Insert
+2. Delete
+3. Display
+4. Find Max/Min
+5. Reverse
+6. Sum/Average
+7. Exit
+Choice: 1
+
+Enter index and value to insert: 2 10
+
+Array after insertion: 1 3 10 5 7
+
+
+
+Final Code:

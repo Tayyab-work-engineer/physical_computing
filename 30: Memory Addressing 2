@@ -5,10 +5,26 @@ Layout: From low address to high address
 Text Segment(code), Initialised Data(Static/Global), Uninitialised Data(bss)(Static/Global), Heap(), Stack(Function calls/local variables).
 
 stack:
+Stack memory is near the top of memory with high addresses. Each time a function is called,
+the machine allocates some stack memory for it. When a variable is declared, more stack memory is
+allocated. After the function returns, the stack memory of that function is deallocated.
+Explain how this program uses the stack memory:
+int hello() {
+    int a = 100;
+    return a;
+}
+
+int main(){
+    int a;
+    int b = -3;
+    int c = 12345;
+    int *p = &b;
+    int d = hello();
+    return 0;
+}
 
 
-
-heap, 
+Heap: 
 
 
 Static/global memory

@@ -1,9 +1,9 @@
 Understand how variables are stored in memory:
-Memory can be considered an array of bytes where each address is an index in the array and holds 1 byte. 
+Memory can be considered as an array of bytes where each address is an index in the array and holds 1 byte. 
 When you declare a variable in a C program, the C compiler allocates a random memory location to it, 
 depending on the size requirement, which depends on the type. Ex:
 int var1 = 10;
-The compiler assigns the value in a random byte address. Since an int type needs 4 bytes, the next four addresses are earmarked for it.
+The compiler assigns the value in a random byte address. Since an int type needs 4 bytes, the next four addresses are marked for it.
 
 
 intro to memory addressing.
@@ -11,3 +11,15 @@ Modern computer systems use a combination of registers, cache memory, and RAM (R
 with each level having different access times and storage capacities. 
 The management of memory is a critical aspect of computer architecture and software development, 
 as efficient memory usage can have a significant impact on a program’s performance.
+
+Questions:
+Q1. How is memory typically structured in a computer system?
+Q2. What happens when you declare a variable in C?
+Q3. How many bytes are typically allocated for an int variable in C?
+Q4. If an int var1 = 10; is declared, what does the compiler do with regard to memory?
+Q5. What does it mean when memory is referred to as an "array of bytes"?
+Q6. Name the three main memory components used by modern computer systems to store variables.
+Q7. Why is memory management important in computer systems?
+Q8. Which memory component is the fastest: register, cache, or RAM?
+Q9. How does variable size affect memory allocation?
+Q10. What role does the compiler play in memory addressing?

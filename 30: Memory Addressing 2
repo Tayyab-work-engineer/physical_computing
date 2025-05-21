@@ -1,1 +1,42 @@
-Explore memory layout: stack, heap, static/global memory, and code segment.
+Explore memory layout: 
+refers to how the program’s data is stored in the computer memory during its execution. 
+A C program's memory is organised into specific regions(segments).
+Layout: From low address to high address
+Text Segment(code), Initialised Data(Static/Global), Uninitialised Data(bss)(Static/Global), Heap(), Stack(Function calls/local variables).
+
+stack:
+
+
+
+heap, 
+
+
+Static/global memory
+
+
+
+Code segment.
+
+
+Question: WHat happens in the memory when this program is executed? Stack segment, Global segment
+#include <stdio.h>
+
+int total;
+
+int Square(int x)
+{
+    return x * x;
+}
+
+int SquareOfSum(int x, int y)
+{
+    int z = Square(x + y);
+    return z;
+}
+
+int main()
+{
+    int a = 4, b = 8;
+    total = SquareOfSum(a, b);
+    printf("output = %d", total);
+}

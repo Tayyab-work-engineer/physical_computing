@@ -1,1 +1,22 @@
-Practice using & operator to get addresses and visualize them.
+Practice using & operator 
+int a = 10;
+int *pa = &a;
+printf("The variable a holds value %d and the address on the memory is %p\n",a,(void*)pa);
+//Because %p expects a void*. This avoids compiler warnings.
+
+Memory is laid out in contiguous blocks. You can use array to store multiple arrays and answer them to a pointer variable
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(){
+  int arr[5] = {1,2,3,4,5};
+  int *parr = &arr[0];
+
+  for (int i = 0; i < 5; i++) {
+    printf("arr[%d] = %d at address %p\n", i, arr[i], (void*)&arr[i]);
+    printf("arr[%d] = %d at address %p\n", i, *(parr+i), (void*)(parr+i));
+  }
+
+return 0;
+}
+

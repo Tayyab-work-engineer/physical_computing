@@ -1,6 +1,6 @@
 Pointer arithmetic
 a pointer ptr holds the address 1000 
-and we increment the pointer, then the pointer will be incremented 
+and we increment the pointer,
 by 4 or 8 bytes (size of the integer), and the pointer will now hold the address 1004.
 
 ptr++; //1004

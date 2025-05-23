@@ -25,14 +25,35 @@ int main(){
 
 
 Heap: 
+For allocating large chunks of memory, or keeping variable in the memory till the time we want.
+Unlike stack, applications heap is not fixed. Its size can vary even when the program is running and 
+A programmer can control it. We need to be careful when using heap because it can make the memory
+run out if the programmer keeps requesting it. 
+How to use heap:
+Use these functions malloc, calloc, realloc, free
+
+Ex: explain this code using the memory layout
+#include <stdio.h>
+#include <stdlib.h>
+int main(){
+    int a;// goes on stack
+    // to get some space on the heap use the malloc
+    int *p;
+    p = (int*)malloc(sizeof(int)); //one block of 4 bytes is reserved on the heap 
+    //malloc returns a pointer to the starting address of this block,
+    // p will be located in the stack frame of the main, and store the address
+    *p = 10; //put something on p.
+    free(p); //deallocate
+    p = (int*)malloc(2*sizeof(int)); //2 blocks of 4 bytes is reserved on the heap 
+    *p = 20; // or p[0]
+    *(p+1) = 30; //or p[1]
+    free(p);
+    }
 
 
 Static/global memory
 
-
-
 Code segment.
-
 
 Question: WHat happens in the memory when this program is executed? Stack segment, Global segment
 #include <stdio.h>

@@ -1,3 +1,6 @@
+Good Read
+https://abstractexpr.com/2023/06/29/structures-in-c-from-basics-to-memory-alignment/
+
 Structures:
 A way to group several related variables into one place. Each variable is known as a member.
 Ex:
@@ -46,5 +49,131 @@ int main(){
 return 0;
 }
 
+Using pointers for structures:
+Ex: Showing importance of pointers
+____________________________________________________
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-Understand memory alignment and padding.
+struct student{       // Structure declaration
+    char name[10];    // Member (char variable)
+    int age;          // Member (int variable)
+    char grade;
+};                    // End with semicolon
+
+void setAge(struct student *s, int age) {
+    s->age = age;  // Modifies original
+}
+
+void setGrade(struct student s1, char grade) {
+    s1.grade = grade; // only changes inside this function
+    
+    printf("Inside Function s1 -> grade: %c\n", s1.grade); //Still C
+
+}
+
+int main() {
+    struct student s1;
+    struct student *sp = &s1;
+    
+    strcpy(sp->name, "Sam");  // Use strcpy to copy string into array
+    
+    setAge(sp, 42);
+
+    sp -> grade = 'C';
+    
+    setGrade(s1, 'D');
+    
+    printf("s1 -> name: %s\n", s1.name);
+    printf("s1 -> age: %d\n", s1.age);
+    printf("s1 -> grade: %c\n", s1.grade); //Still C
+
+
+
+    return 0;
+}
+__________________________________________________________________
+Why use pointers for structures?
+1. Required for linked structures, Like linked lists and trees
+2. Enables dynamic memory, Required for heap allocation (malloc)
+3. Allows modification, Functions can update original values
+
+https://www.geeksforgeeks.org/structure-member-alignment-padding-and-data-packing/
+Understand memory alignment 
+The processor uses fetch, decode and execute to run programs. If the memory is arranged 
+as a single bank of one-byte width, the processor needs to issue 4 memory read cycles to 
+fetch an integer. We can improve this if memory is arranged as a group of 4 banks. This way
+the processor can read all 4 bytes of an integer in one memory cycle.
+
+Padding
+Structure padding is the addition of some empty bytes of memory in the structure to naturally 
+align the data members in the memory. It is done to minimize the CPU read cycles to retrieve 
+different data members in the structure.
+
+// structure A
+typedef struct structa_tag {
+    char c;
+    short int s;
+} structa_t;
+
+// structure B
+typedef struct structb_tag {
+    short int s;
+    char c;
+    int i;
+} structb_t;
+
+Size of Structure A = Size of (char + short int) = 1 + 2 = 3.
+Size of Structure B = Size of (short int + char + int) = 2 + 1 + 4 = 7.
+
+Confirm the size:
+int main()
+{
+    printf("sizeof(structa_t) = %lu\n", sizeof(structa_t)); //4
+    printf("sizeof(structb_t) = %lu\n", sizeof(structb_t)); //8
+    return 0;
+}
+sizeof(char) + 1 (padding) + sizeof(short), 1 + 1 + 2 = 4 bytes.
+
+⚠️ Why You Should Care (Detailed Explanation)
+🔴 1. Memory Efficiency: Padding Wastes Memory
+📌 Problem:
+Every time padding is inserted into a structure, those bytes are unused, 
+but they still take up space in memory. If you're creating hundreds or 
+thousands of structure instances (e.g., in arrays or on the heap), 
+those small paddings add up quickly.
+
+struct inefficient {
+    char c;     // 1 byte
+    int i;      // 4 bytes, but starts at offset 4 (requires 3 bytes padding after 'c')
+};
+
+Total size: 8 bytes (1 + 3 padding + 4)
+
+3 bytes wasted per structure
+
+Now imagine this in an array of 1,000 structures:
+
+3 KB of memory is wasted — doing nothing.
+
+✅ Solution: Rearranging to Reduce Padding
+struct efficient {
+    int i;      // 4 bytes
+    char c;     // 1 byte
+};
+Now: only 1 byte of padding at the end
+
+Total size: 5 bytes (vs. 8 bytes before)
+
+Saved 3 bytes per instance
+
+Memory-optimized design = more efficient code, especially in embedded or 
+low-memory environments.
+
+🔴 2. Interfacing with Hardware or Networking (Data Layout Matters)
+📌 Problem:
+In embedded systems, networking, or low-level programming, you often read/write data 
+directly to/from hardware registers or binary protocols. These expect the exact byte layout 
+— no extra padding.
+

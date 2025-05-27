@@ -40,3 +40,212 @@ Array after insertion: 1 3 10 5 7
 
 
 Final Code:
+#include <stdio.h>
+#include <stdlib.h>
+
+
+
+int calculate_sum(int *arr, int size){
+    int result = 0;
+    for (int i=0;i<size;i++){
+        result = result + *(arr + i);
+    }
+    
+    return result;
+}
+
+float calculate_average(int *arr, int size){
+    float result = 0;
+    for (int i=0;i<size;i++){
+        result = result + *(arr + i);
+    }
+    
+    
+    return result/size;
+}
+
+void reverse_array(int *arr, int size){
+    int temp_array[size];
+    
+    for (int i=0;i<size;i++){
+        temp_array[i] = *(arr+size-1-i);
+    }
+    
+    for (int i=0;i<size;i++){
+        *(arr+i) = temp_array[i];
+    }
+
+
+}
+
+int* insert(int *arr, int size, int index, int value){
+    //shift direction backwards
+    arr = realloc(arr, (size)*sizeof(int));
+    // size 3
+    // ex, index = 0 and value 0
+    for (int i=size; i>index; i--){
+        //i = 3
+        // 1 2 _
+        arr[i] = arr[i-1];
+        // 1 2 2
+    }
+    //final
+    // 1 1 2
+    arr[index] = value;
+    // 0 1 2
+    
+    return arr;
+    
+}
+
+int* delete(int *arr, int size, int index){
+    printf("Delete index %d",index);
+    
+    //shift direction: forwards
+    
+    for (int i=0; i<index; i++){
+        arr[i] = arr[i+1];
+    }
+    
+    
+    arr = realloc(arr, (size)*sizeof(int));
+
+    return arr;
+    
+}
+
+void max_min(int *arr, int size, int *max, int *min){
+    *max = *(arr+0);
+    *min = *(arr+0);
+    for (int i=1; i<size;i++){
+        if ( *max < *(arr+i) ){
+            *max = *(arr+i);
+        }
+        if ( *min > *(arr+i) ){
+            *min = *(arr+1);
+        }
+    }
+    
+}
+
+
+int main() {
+    int size;
+    int *ptr;
+    int sum;
+    float avg;
+    int choice;
+    
+    printf("Enter Size of elements: ");
+    scanf("%d",&size);
+
+    ptr = (int*)malloc(size*sizeof(int));
+    
+    printf("Enter Numbers \n");
+
+    for (int i=0;i<size;i++){
+        printf("Enter %d: ",i+1);
+        scanf("%d",ptr+i);
+    }
+    
+    printf("Choose an operation:\n");
+    printf("1. Insert\n");
+    printf("2. Delete\n");
+    printf("3. Display\n");
+    printf("4. Find Max/Min\n");
+    printf("5. Reverse\n");
+    printf("6. Sum/Average\n");
+    printf("7. Exit\n");
+
+    for (int i=0;i<7;i++) {
+        printf("Choice: ");
+        scanf("%d", &choice);
+        
+        if (choice == 1){
+            int index;
+            int value;
+            printf("Enter index: ");
+            scanf("%d",&index);
+            printf("Enter value: ");
+            scanf("%d",&value);
+            
+            if (index>size || index < 0){
+                printf("Invalid");
+                continue;
+            }
+            size = size+1;
+            
+            ptr = insert(ptr, size, index, value);
+            
+
+            
+
+        }
+        else if(choice == 2){
+            int index;
+            printf("Enter index: ");
+            scanf("%d", &index);
+            
+            if (index>size-1 || index<0){
+                printf("Invalid");
+                continue;
+            }
+            size = size - 1;
+            
+            ptr = delete(ptr, size, index);
+            
+            
+        }
+        else if(choice == 3){
+            
+            for (int i=0; i<size; i++){
+                printf("%d  ",*(ptr+i));
+                
+            }
+            
+            printf("\n");
+            
+        }
+        else if(choice == 4){
+            int max;
+            int* pmax = &max;
+            int min;
+            int* pmin = &min;
+            
+            max_min(ptr, size, pmax, pmin);
+            
+            printf("max:%d \n",*pmax);
+            printf("min:%d \n",*pmin);
+
+            
+        }
+        else if (choice == 5){
+            reverse_array(ptr, size);
+            for (int i=0; i<size; i++){
+                printf("%d  ",*(ptr+i));
+                
+            }
+            printf("\n");
+        }
+        else if(choice == 6){
+            sum = calculate_sum(ptr, size);
+            printf("Sum = %d\n",sum);
+            
+            avg = calculate_average(ptr, size);
+            printf("Avg = %f\n",avg);
+            
+        }
+        else if(choice == 7){
+            break;
+        }
+        else{
+            printf("Invalid response\n");
+        }
+    }
+    
+    
+    free(ptr);
+    return 0;
+}
+
+

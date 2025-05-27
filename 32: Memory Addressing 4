@@ -1,1 +1,50 @@
+Structures:
+A way to group several related variables into one place. Each variable is known as a member.
+Ex:
+struct student{       // Structure declaration
+    char name[10];    // Member (char variable)
+    int age;          // Member (int variable)
+    char grade;
+};                    // End with semicolon 
+
+
+To access the structure, you create a variable inside the main
+struct student s1;
+
+Now you need to fill out the details of this variable
+s1.age = 10;
+s1.grade = 'A';
+strcpy(s1.name, "Kevin");
+
+OR
+
+struct student s2 = {"Tay", 24, 'A'};
+
+But this way you need to be careful of the order.
+You can get around this using this method
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct student{       // Structure declaration
+    char name[10];    // Member (char variable)
+    int age;          // Member (int variable)
+    char grade;
+};                    // End with semicolon 
+
+
+int main(){
+	struct student s3 = {
+		.name = "Poppy",
+		.age = 25,
+		.grade = 'B'
+
+	};
+
+	printf("s3 name %s", s3.name);
+
+return 0;
+}
+
+
 Understand memory alignment and padding.

@@ -1,0 +1,98 @@
+Create visual diagrams of memory allocation for small programs.
+1.
+
+#include <stdio.h>
+
+int globalVar = 10; // Static (Data segment)
+
+int main() {
+    int localVar = 5; // Stack
+    printf("%d\n", globalVar + localVar);
+    return 0;
+}
+
++--------------------------+
+|      Code Segment        | <- Machine instructions (e.g., printf)
++--------------------------+
+|      Data Segment        | <- globalVar (value = 10)
++--------------------------+
+|          Heap            | <- (Unused in this example)
++--------------------------+
+|          Stack           | <- localVar (value = 5)
+|         (grows down)     |
++--------------------------+
+
+📘 Program 2: Dynamic Allocation
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int *ptr = (int*)malloc(sizeof(int)); // Heap
+    *ptr = 42;
+    printf("%d\n", *ptr);
+    free(ptr); // Free heap memory
+    return 0;
++--------------------------+
+|      Code Segment        | <- Instructions
++--------------------------+
+|      Data Segment        | <- (Unused here)
++--------------------------+
+|          Heap            | <- malloc allocates memory (*ptr = 42)
+|         (grows up)       |
++--------------------------+
+|          Stack           | <- ptr (stores address to heap memory)
+|         (grows down)     |
++--------------------------+
+
+
+📘 Program 3: Mixed Memory Allocation with Function Calls
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int globalCounter = 0;  // Data Segment
+
+void compute(int *arr, int size) {
+    int localSum = 0;   // Stack (in compute)
+    for (int i = 0; i < size; ++i) {
+        localSum += arr[i];
+    }
+    printf("Sum: %d\n", localSum);
+}
+
+int main() {
+    int localVar = 5;                   // Stack (in main)
+    int *heapArr = malloc(3 * sizeof(int)); // Heap
+    heapArr[0] = 10;
+    heapArr[1] = 20;
+    heapArr[2] = 30;
+
+    compute(heapArr, 3);               // Function call, new stack frame
+
+    free(heapArr);                     // Deallocate heap
+    return 0;
+}
+
+
++-----------------------------+
+|      Code Segment           |  <- Instructions (main, compute, malloc, printf)
++-----------------------------+
+|      Data Segment           |  <- globalCounter = 0
++-----------------------------+
+|          Heap               |  <- heapArr = [10, 20, 30]
+|     (grows upwards)         |
++-----------------------------+
+|       Stack Frame: compute  |
+|  localSum = 0               |
+|  arr (pointer to heapArr)   |
+|  size = 3                   |
+|  i (loop index)             |
++-----------------------------+
+|       Stack Frame: main     |
+|  localVar = 5               |
+|  heapArr (pointer to heap)  |
++-----------------------------+
+|        Stack Bottom         |
++-----------------------------+
+
+

@@ -1,6 +1,13 @@
-Debug memory issues 
+What are debug memory issues:
+Memory leaks are when memory is being used and onces it finishes its left without being freed.
+This can eventually lead to memory being filled up and lead to crashes.
 
+Common causes are when you forget to deallocate using the free function. 
 
+Debug memory issues using tools like valgrind (on Linux):
+Valgrind is a open source framework for debugging and profiling Linux applications.
 
-
-Debug memory issues using tools like valgrind (on Linux).
+How to use?
+1. Compile your program
+2. Run valgrind against your compiled program (only works for linux)
+valgrind --show-leak-kinds=all ./c

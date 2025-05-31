@@ -44,7 +44,77 @@ int main(){
 
 
 Structures:
+Are a way to group several related variables into one place.
+Why use them?
+If you have a group of students. You would want to store each name, age, parents name, parents email together.
 
+struct students{
+	char name[10];
+	int age;
+	char p_name[10];
+	char email[30];
+};
 
+//To create a structure students for a student name tayyab
+struct students s1;
+
+//To update the struct student
+strcpy(s1.name, "Tayyab");
+s1.age = 24;
+strcpy(s1.p_name, "Haris");
+strcpy(s1.email, "Tayyabbaig1308");
+
+printf("Student 1\n");
+printf("%s\n", s1.name);
+printf("%d\n", s1.age);
+printf("%s\n", s1.p_name);
+printf("%s\n", s1.email);
 
 Array of Structures:
+
+previous:
+struct students{
+	char name[10];
+	int age;
+	char p_name[10];
+	char email[30];
+};
+
+struct students Tayyab;
+What if?
+struct students class1[30];
+You just created an array that stores several structures
+You can update the structures
+strcpy(class1[1].name, "Tayyab");
+class1[1].age = 24;
+
+Importance:
+If you try to create 1000 employee structures then it will look like this.
+struct Employee emp1, emp2, emp3, .. . ... . ..  ... emp1000;
+
+Its better to just do
+struct Employee emp[1000];
+
+
+Traversal:
+struct A {
+    int var;
+  	char c;
+};
+
+struct A arr[5] = 	{ {1, 'a'}, 
+			  {2, 'b'}, {3, 'c'},
+                          {4, 'd'}, 
+			  {5, 'e'} };
+// Traverse arr
+for (int i = 0; i < 5; i++)
+      	printf("%d %c\n", arr[i].var, arr[i].c);
+
+output:
+1 a
+2 b
+3 c
+4 d
+5 e
+
+

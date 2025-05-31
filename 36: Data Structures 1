@@ -1,1 +1,50 @@
+Learn about arrays:
+What are arrays?
+Arrays are storing (methods) for many values that are similar.
+Ex:
+Single variable to store one value
+int bank_note = 5;
+Array to store  many values
+int bank_notes[] = {5, 0, 20, 50};
 
+You can access items of an array:
+bank_notes[1] = 10;
+
+The array stores the elements close to each other and fixed space apart.
+printf("Address of:\nbank_notes[0] = %p\nbank_notes[1] = %p",&bank_notes[0],&bank_notes[1]);
+
+Output:
+Address of:
+bank_notes[0] = 00000080c17ff980
+bank_notes[1] = 00000080c17ff984
+
+Functions and Array:
+You can pass arrays to functions and this will pass the array by reference(using the address 
+of the first element in the array) and not by value.
+
+This means that the value will be changed in the array.
+If we do using a variable then the value will stay the same.
+Ex:
+#include <stdio.h>
+#include <stdlib.h>
+
+void fun(int bank_notes[]){
+	bank_notes[1] = 10; // change the second element
+}
+
+int main(){
+	int bank_notes[] = {5, 0, 20, 50};
+
+	printf("Value: bank_notes[1] = %d\n", bank_notes[1]); //output 0
+	fun(bank_notes);
+	printf("Value: bank_notes[1] = %d\n", bank_notes[1]); // output 10
+
+	return 0;
+}
+
+
+Structures:
+
+
+
+Array of Structures:

@@ -1,1 +1,55 @@
+Implement linked lists (singly):
+What are linked lists? 
+Collection of data elements(nodes)
+Each node contains a reference to the next node in the list
+Elements hold whatever data the application needs
+The last element has reference to NULL
+Ex:
+Element: 38  --1000-> 13 --1020-> 49 --NULL->
+In this example, the first element is 38 and it
+points to the next element 13 which is on
+address 1000. The second element is 13 which
+pointers to the next element 49 which is
+on address 1020.
+
+
+Linked lists(doubly) 
+This is similar to a linked list(singly) however
+each element points to the next element and the 
+previous element. 
+
++elements can be easily inserted and removed
++underlying memory doesn't need to be reorganised
+-can't do constant time random item access
+-item lookup is linear time complexitiy ( O(n) )
+
+
+Programming a linked list:
+Element: 38  --1000-> 13 --1020-> 49 --NULL->
+________________________________________________________________
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Node{
+    int data;
+    struct Node* next;
+    
+}
+
+int main() {
+    struct Node one = {38, NULL};
+    struct Node two = {13, NULL};
+    struct Node three = {49, NULL};
+    one.next = &two;
+    two.next = &three;
+    return 0;
+}
+
+________________________________________________________________
+
+Another method:
+________________________________________________________________
+
+
 

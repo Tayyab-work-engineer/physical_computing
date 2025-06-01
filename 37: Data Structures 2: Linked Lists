@@ -48,8 +48,60 @@ int main() {
 
 ________________________________________________________________
 
-Another method:
+Another method: Using dynamically allocated memory
 ________________________________________________________________
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
+struct Node{
+    int data;
+    struct Node* next;
+    
+};
+
+int main() {
+    // Allocate memory for nodes dynamically
+    struct Node* pone = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* ptwo = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* pthree = (struct Node*)malloc(sizeof(struct Node));
+    
+    // Check for successful memory allocation
+    if (!pone || !ptwo || !pthree) {
+        printf("Memory allocation failed\n");
+        return 1;
+    }
+    
+    // Assign data and links
+    pone->data = 38;
+    pone->next = ptwo;
+
+    ptwo->data = 13;
+    ptwo->next = pthree;
+
+    pthree->data = 49;
+    pthree->next = NULL;
+
+    
+
+    
+    // Print the linked list
+    struct Node* current = pone;
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+    
+    // Free allocated memory
+    free(pone);
+    free(ptwo);
+    free(pthree);
+
+    return 0;
+}
+
+____________________________________________________________
+Watch video on linked lists
 
 

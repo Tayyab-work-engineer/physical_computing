@@ -1,8 +1,112 @@
- Create a stack using an array
+Implementing a Stack Using an Array
+
+What is a Stack?
+A stack is a linear data structure that follows the Last In, First Out (LIFO) principle. 
+This means that the last element added to the stack is the first one to be removed.
+For example, if the numbers 1, 2, 3, and 4 are pushed onto the stack in that order, 
+they will be popped in the reverse order: 4, 3, 2, 1.
+
+Applications of a Stack:
+Function call management (recursion)
+Expression evaluation and syntax parsing
+Backtracking algorithms (e.g., maze solving, undo functionality)
+Compile-time memory management
+Implementation of efficient algorithms such as depth-first search (DFS)
+
+Implementing a stack(beginner):
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define SIZE 4
+
+int top = -1;
+int stack[SIZE];
+
+void push(){
+    int x;//element to add
+    //Adds an element to the top of the stack.
+    //First, it checks whether top is equivalent to SIZE - 1
+    if(top == SIZE-1){
+        printf("\nOverflow!!");
+        
+    }
+    else{
+        printf("\nEnter the element to be added onto the stack: ");
+        scanf("%d", &x);
+        top = top + 1;
+        stack[top] = x;
+        
+    }
+}
+
+void pop(){
+    
+    if(top==-1){
+        printf("\nUnderflow");
+    }
+    else{
+        //the topmost element is removed, and the program outputs the resulting stack.
+        printf("\nPopped element: %d", stack[top]);
+        top = top -1;
+        
+    }
+    
+}
+
+void show()
+{
+    if (top == -1)
+    {
+        printf("\nUnderflow!!");
+    }
+    else
+    {
+        printf("\nElements present in the stack: \n");
+        for (int i = top; i >= 0; --i)
+            //--i means
+            //i=3, then --i means 3 then later 2
+            printf("%d\n", stack[i]);
+    }
+}
+
+int main() {
+    int choice;
+
+    while (1)
+    {
+        printf("\nPerform operations on the stack:");
+        printf("\n1.Push the element\n2.Pop the element\n3.Show\n4.End");
+        printf("\n\nEnter the choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+            case 1:
+                push();
+                break;
+                
+            case 2:
+                pop();
+                break;
+                
+            case 3:
+                    show();
+                    break;
+            case 4:
+                    exit(0);
+                
+            default:
+                printf("\nInvalid choice!!");
+        }
+    }
+    
+
+    return 0;
+}
 
 
-
-
+Implementing stack the advance way: (https://www.youtube.com/watch?v=Flk5yrlx5Qo)
 
 
 

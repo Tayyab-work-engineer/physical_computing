@@ -111,3 +111,60 @@ Implementing stack the advance way: (https://www.youtube.com/watch?v=Flk5yrlx5Qo
 
 
 Stacks using linked list.
+Use linked list when the size of stack is not known. You can create as many nodes.
+Visualize.
+34 --> 21 --> 78
+The head(top) points to 34 which is the first node of the list.
+For push operation a node will be inserted at the beginning of the linked list.
+This new element will be pushed in front of the linked list.
+50 --> 34 --> 21 --> 78
+The head(top) will be changed and 
+Now the head(top) points to 50.
+For pop operation, 50 will be removed as its last in first out. So head(top)
+will change to 34 and 50 will be removed from memory.
+
+Push Operation Code:(https://www.youtube.com/watch?v=25oEU6h6zqw)
+Procedure:
+1. Create a new node
+2. Put the address of the first node(34) in the link part of the new node
+3. Update the top pointer and make it to point to the new node of the linked list.
+
+Coding:
+struct node* newNode; //create a new node
+newNode = malloc(sizeof(newNode));
+newNode->data = data;
+newNode->link = NULL;
+
+newNode->link = top; //Put the address of the first node(34) in the link part of the new node
+
+top = newNode;//Update the top pointer and make it to point to the new node of the linked list.
+
+Complete function
+void push(int data){
+    struct node* newNode;
+    newNode = malloc(sizeof(newNode));
+    if(newNode==NULL){
+        printf("Stack overflow.");
+        exit(1);
+
+    }
+    newNode->data = data;
+    newNode->link = NULL;
+
+    newNode->link = top;
+    top = newNode;
+}
+
+final vid: (https://www.youtube.com/watch?v=311qJJHiQjU)
+
+
+
+
+
+
+
+
+
+
+
+

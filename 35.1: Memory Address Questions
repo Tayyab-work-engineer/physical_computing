@@ -1,0 +1,203 @@
+Monday: Variables in Memory & Addressing
+Print Addresses of Variables
+Write a C program that declares three variables of different types (int, float, char). Print their addresses using &.
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(){
+	//declaration
+	int a;
+	float b;
+	char c;
+
+	int *pa = &a;
+	float *pb = &b;
+	char *pc = &c;
+
+	printf("Address of \na = %p\nb = %p\nc = %p",(void *)pa,(void *)pb,(void *)pc);
+
+	return 0;
+}
+
+Goal: Observe how different variables are stored.
+
+Distance Between Variables
+Declare multiple variables of the same type and print the difference between their addresses.
+Goal: Learn about memory spacing and alignment.
+// Cast to char * before subtraction. This gives the difference in bytes, since sizeof(char) == 1.
+// Use %ld for printing the result (since the difference is of type long).
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(){
+	//declaration
+	int a;
+	int b;
+	int c;
+
+	int *pa = &a;
+	int *pb = &b;
+	int *pc = &c;
+
+	printf("Spacing of Address of A and B = %ld\n", (long)( (char *)pa - (char *)pb ) );
+
+	printf("Spacing of Address of B and C = %ld\n",(long)( (char *)pb - (char *)pc ) );
+
+
+
+	return 0;
+}
+
+Tuesday: Memory Layout Introduction
+Static vs Local Variable Addresses
+Declare a global variable, a static variable, and a local variable. Print their addresses.
+Goal: Understand which segment each type belongs to (global/static/stack).
+
+Global → stored in data (or BSS) segment
+Static → also stored in data (or BSS) segment (not stack)
+Local (automatic) → stored in the stack
+code:
+#include <stdio.h>
+#include <stdlib.h>
+
+int globalA;
+int *pa = &globalA;
+
+int main(){
+	//declaration
+	int localB;
+	static int c;
+
+	int *pb = &localB;
+	int *pc = &c;
+
+
+	printf("%p\n",(void*)pa);
+	printf("%p\n",(void*)pb);
+	printf("%p\n",(void*)pc);
+
+	return 0;
+}
+
+High Memory
+│
+├─ Stack (local variables, function frames)
+│
+├─ Heap (malloc/free)
+│
+├─ BSS & Data (static/global variables)
+│
+└─ Code (instructions)
+Low Memory
+
+
+Wednesday: & Operator Practice
+Pointer Chain Addressing
+Create an int x, int *p = &x, and int **pp = &p. Print each address and dereference values.
+Goal: Practice address-of and dereference chaining.
+Code:
+#include <stdio.h>
+#include <stdlib.h>
+
+
+
+int main(){
+	int x = 1;
+	int *p = &x;
+	int **q = &p;
+
+	printf("Value of x = %d And Address of x = %p\n",x,p);
+	printf("Value of p = %p And Dereference p = %d\n",p,*p);
+	printf("Value of q = %p And Dereference q = %p\n",q,*q);
+
+	return 0;
+}
+
+Output:
+Value of x = 1 And Address of x = 000000c2c79ff774
+Value of p = 000000c2c79ff774 And Dereference p = 1
+Value of q = 000000c2c79ff768 And Dereference q = 000000c2c79ff774
+
+Array Addressing
+Declare an array and use pointer arithmetic to print the address of each element.
+Goal: Visualize contiguous memory in arrays.
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(){
+	int x[5] = {1,2,3,4,5};
+	for(int i=0;i<5;i++){
+		printf("x[%d] = %p\n",i,&x[i]);
+	}
+	return 0;
+}
+
+Output:
+x[0] = 00000027f25ff890
+x[1] = 00000027f25ff894
+x[2] = 00000027f25ff898
+x[3] = 00000027f25ff89c
+x[4] = 00000027f25ff8a0
+
+Medium Questions:
+Thursday: Memory Alignment & Padding
+Struct Padding Check
+Create a struct with char, int, and double. Print sizeof(struct) and offset each member using pointer arithmetic.
+Goal: Understand padding and alignment.
+
+Code:
+#include <stdio.h>  
+struct bag  
+{  
+   char x;  
+   char y; 
+   int z;  
+};  
+
+struct bag2  
+{  
+   char x;  
+   int z;  
+  char y;  
+};  
+
+int main()  
+{  
+   struct bag bag1;    // variable is declared of the object types..  
+                       // size of the structure bag is displayed.  
+
+   struct bag2 bag2;
+   printf("The size of the bag structure is %d\n", sizeof(bag1));   // size of bag is printed
+   printf("The size of the bag structure is %d\n", sizeof(bag2));   // size of bag is printed
+
+   return 0;  
+}  
+
+Output:
+The size of the bag structure is 8
+The size of the bag structure is 12
+
+
+Packed Struct
+Use #pragma pack(1) to disable padding. Compare size and offsets to the previous example.
+
+Goal: Contrast performance vs space usage.
+
+Friday: Debug Memory Issues
+Memory Leak Finder
+Write a program that dynamically allocates memory using malloc but forgets to free it. Use Valgrind to detect the leak.
+
+Goal: Use tools to find leaks.
+
+Invalid Memory Access
+Access memory after freeing it and observe the Valgrind output.
+
+Goal: Practice identifying use-after-free bugs.
+
+
+
+
+
+
+

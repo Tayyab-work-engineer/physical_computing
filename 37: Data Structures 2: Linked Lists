@@ -25,157 +25,223 @@ previous element.
 
 
 Programming a linked list:
-Element: 38  --1000-> 13 --1020-> 49 --NULL->
-________________________________________________________________
+Video 1(Creating a node)
+Node has data+link
+
+struct node{
+	int data;
+	struct node *link; //pointer to another node
+};
+
+How to create a node in C:
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-struct Node{
-    int data;
-    struct Node* next;
-    
+struct node {
+	int data;
+	struct node *link;
+};
+
+int main(){
+	struct node *head = NULL;	//pointer to the first node of the list, similar to int *ptr;
+	head = (struct node *)malloc(sizeof(struct node)); //allocate memory on the heap and can be accessed through head pointer, similar to ptr = (int*)malloc(...
+
+	head -> data = 45;
+	head -> link = NULL;
+
+	printf("%d", head->data);
+	return 0;
 }
 
-int main() {
-    struct Node one = {38, NULL};
-    struct Node two = {13, NULL};
-    struct Node three = {49, NULL};
-    one.next = &two;
-    two.next = &three;
-    return 0;
-}
+output: 45
 
-________________________________________________________________
+video 2(creating a single linked list):
+Example
+ 45  --2000-> 98 --3000-> 3 --NULL->
+ |             |          |
+1000          2000       3000
+Head
 
-Another method: Using dynamically allocated memory
-________________________________________________________________
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-typedef struct Node{
-    int data;
-    struct Node* next;
-}Node; //Node is a struct that represents one element in a linked list.
+struct node {
+	int data;
+	struct node *link;
+};
 
-//Function to create a new node
-Node* createNode(int data){
-	Node* newNode = (Node*)malloc(sizeof(Node));
-	if (!newNode){
-		printf("Memory allocation failed!\n");
-		exit(1);
+int main(){
+	struct node *head = malloc(sizeof(struct node)); //lets say returns heap memory address 1000
+	head -> data = 45; //saves 45 into the heap memory for data
+	head -> link = NULL; //saves NULL into the heap memory for link
 
+	head = malloc(sizeof(struct node));  //lets say returns heap memory address 2000
+	head -> data = 98;
+	head -> link = NULL;
+
+	return 0;
+}
+Visualisation
+ 45|NULL   98|NULL
+ |          |         
+1000       2000       
+	   Head
+
+How do we access the first node? We lost connect to it. We can fix it by using another pointer
+
+ 45|NULL   98|NULL
+ |          |         
+1000       2000       
+Head	   Current
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+	int data;
+	struct node *link;
+};
+
+int main(){
+	struct node *head = malloc(sizeof(struct node)); //lets say returns heap memory address 1000
+	head -> data = 45; //saves 45 into the heap memory for data
+	head -> link = NULL; //saves NULL into the heap memory for link
+
+	struct node *current = malloc(sizeof(struct node));  //lets say returns heap memory address 2000
+	current -> data = 98;
+	current -> link = NULL;
+
+	//Now update the link part of the first node
+	head->link = current;
+
+	return 0;
+}
+
+Visualisation:
+
+ 45|2000 ---->   98|NULL
+ |                |         
+1000            2000       
+Head	        Current
+
+Video 3(part 2):
+Adding the third node.
+What does head->link give? head --> 1000? 2000
+what does head->link-link give? head --> 1000 --> 2000 ? 3000
+
+ 45  --2000-> 98 --3000-> 3 --NULL->
+ |             |          |
+1000          2000       3000
+Head
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+	int data;
+	struct node *link;
+};
+
+int main(){
+	struct node *head = malloc(sizeof(struct node)); //lets say returns heap memory address 1000
+	head -> data = 45; //saves 45 into the heap memory for data
+	head -> link = NULL; //saves NULL into the heap memory for link
+
+	struct node *current = malloc(sizeof(struct node));  //lets say returns heap memory address 2000
+	current -> data = 98;
+	current -> link = NULL;
+	head->link = current;
+
+	current = malloc(sizeof(struct node));
+	current->data = 3;
+	current->link = NULL;
+
+	return 0;
+}
+
+Visualisation:
+ 45  --2000-> 98|NULL     3 --NULL->
+ |             |          |
+1000          2000       3000
+Head                     Current
+
+Current points to the third node and not the second node anymore.
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+	int data;
+	struct node *link;
+};
+
+int main(){
+	struct node *head = malloc(sizeof(struct node)); //lets say returns heap memory address 1000
+	head -> data = 45; //saves 45 into the heap memory for data
+	head -> link = NULL; //saves NULL into the heap memory for link
+
+	struct node *current = malloc(sizeof(struct node));  //lets say returns heap memory address 2000
+	current -> data = 98;
+	current -> link = NULL;
+	head->link = current; //first node points to the second node
+
+	current = malloc(sizeof(struct node));
+	current->data = 3;
+	current->link = NULL;
+
+	head->link->link = current; //second node points to the third node
+
+	return 0;
+}
+
+ 45  --2000-> 98 --3000-> 3 --NULL->
+ |             |          |
+1000          2000       3000
+Head
+
+
+Video 3(traversing a single linked list):
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+	int data;
+	struct node *link;
+};
+
+void count_of_nodes(struct node *head){//takes in head
+	int count = 0;
+	//check if linked list in empty
+	if (head == NULL){
+		printf("Linked list is empty");
 	}
-	newNode->data = data;
-	newNode->next = NULL;
 
-	return newNode;
-}
-
-void printList(Node* node){
-	while(node){
-		printf("%d -> ", node->data);
-		node = node->next;
+	struct node *ptr = NULL;
+	ptr = head; //
+	while(ptr != NULL){
+		count++;
+		printf("%d\n",ptr->data);
+		ptr = ptr->link;
 	}
-	printf("null\n");
+	printf("Number of nodes %d",count);
 }
 
+int main(){
+	struct node *head = malloc(sizeof(struct node)); //lets say returns heap memory address 1000
+	head -> data = 45; //saves 45 into the heap memory for data
+	head -> link = NULL; //saves NULL into the heap memory for link
 
+	struct node *current = malloc(sizeof(struct node));  //lets say returns heap memory address 2000
+	current -> data = 98;
+	current -> link = NULL;
+	head->link = current; //first node points to the second node
 
+	current = malloc(sizeof(struct node));
+	current->data = 3;
+	current->link = NULL;
 
-int main() {
-	Node* node1 = createNode(38);
-	Node* node2 = createNode(13);
-	Node* node3 = createNode(49);
-
-	node1->next = node2;
-	node2->next = node3;
-
-	printList(node1);
-
-	free(node1);
-	free(node2);
-	free(node3);
-
-    return 0;
-}
-
-____________________________________________________________
-Adding more operations:Adds new nodes to the end of the linked list
-#include <stdio.h>
-#include <stdlib.h>
-
-// Define the Node structure
-typedef struct Node {
-    int data;
-    struct Node* next;
-} Node;
-
-// Function to create a new node
-Node* createNode(int data) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    if (!newNode) {
-        printf("Memory allocation failed!\n");
-        exit(1);
-    }
-    newNode->data = data;
-    newNode->next = NULL;
-    return newNode;
-}
-
-// Function to insert a node at the end of the list
-void insertAtEnd(Node** head, int data) {
-    Node* newNode = createNode(data);
-    if (*head == NULL) {
-        *head = newNode;
-    } else {
-        Node* temp = *head;
-        while (temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-    }
-}
-
-// Function to print the linked list
-void printList(Node* node) {
-    while (node) {
-        printf("%d -> ", node->data);
-        node = node->next;
-    }
-    printf("null\n");
-}
-
-// Function to free the memory used by the linked list
-void freeList(Node* head) {
-    Node* temp;
-    while (head != NULL) {
-        temp = head;
-        head = head->next;
-        free(temp);
-    }
-}
-
-int main() {
-    Node* head = NULL;
-
-    // Array of numbers to insert
-    int numbers[] = {10, 20, 30, 40, 50};
-    int size = sizeof(numbers) / sizeof(numbers[0]);
-
-    // Build the linked list from the array
-    for (int i = 0; i < size; i++) {
-        insertAtEnd(&head, numbers[i]);
-    }
-
-    // Print the created linked list
-    printf("Linked list created from array:\n");
-    printList(head);
-
-    // Free the memory used by the list
-    freeList(head);
-
-    return 0;
+	head->link->link = current; //second node points to the third node
+	count_of_nodes(head);
+	return 0;
 }
 

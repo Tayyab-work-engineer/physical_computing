@@ -1,0 +1,185 @@
+🔧 Mini Project: Student Grade Manager (Using Pointers)
+🧠 Objective:
+Create a menu-driven C program that manages student grades using dynamic arrays and pointers. Teacher can add, modify, and analyze their students grades for qaida, dua book, islamic studies
+✅ Features to Implement:
+
+Add a new grade (expand array dynamically)
+  0. select add new grade
+  1. choose the student. adam
+  2. choose the subject, eg. qaida
+  3. insert the grade
+
+Remove a grade at specific position
+  1. select remove grade
+  2. choose the student
+  3. choose the subject
+  4. choose the grade
+Display all grades with formatting
+  1. choose the student
+  2. display all the grades for each subject
+Find highest and lowest grades
+  1. select the option and should show student's and there final grade next to each other and in order to highest to lowest
+Calculate GPA (convert to 4.0 scale)
+  1. add the scores and divide by 400
+Exit and cleanup
+
+🔗 Core Concepts You'll Practice:
+
+Pointer arithmetic for array traversal
+Dynamic memory management (malloc, realloc, free)
+Pointer-to-pointer for functions that modify the array
+Function pointers (optional: for different sorting methods)
+Void pointers for generic operations
+
+📋 Sample Interaction:
+=== Student Grade Manager ===
+Enter number of initial grades: 
+Enter grades: 85.5 92.0 78.5
+
+--- Grade Management Menu ---
+1. Add Grade
+2. Remove Grade  
+3. Display Grades
+4. Find Max/Min Grades
+5. Calculate GPA
+6. Exit
+
+Choice: 1
+
+Enter new grade: 88.0
+Grade added! Current count: 4
+
+Choice: 3
+Your Grades: [85.50, 92.00, 78.50, 88.00]
+💡 Bonus Challenges:
+
+Add letter grade conversion (A, B, C, D, F)
+Implement weighted grades (exams worth more than quizzes)
+Add grade categories (homework, quizzes, exams)
+Save/load grades from a file
+
+🎯 Key Functions to Implement:
+cfloat* initializeGrades(int size);
+void addGrade(float** grades, int* count, int* capacity);
+void removeGrade(float** grades, int* count, int index);
+void displayGrades(float* grades, int count);
+float* findMaxMin(float* grades, int count);
+float calculateGPA(float* grades, int count);
+
+
+Try1:
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct madrasah{
+	char name[10];
+	int gradeQaida;
+	int gradeIslamic;
+
+};
+
+void createStudent(struct madrasah *B1, char *name, int *size){
+	strcpy(B1[*size].name, name);
+	(*size)++;//increment size after adding student
+
+}
+
+void insertGrade(struct madrasah *B1, int *size){
+	char name[10];
+	int choice;
+	int grade;
+	printf("Enter student name: ");
+	scanf("%s",name);
+	
+	for(int i=0; i<*size; i++){
+		if ( strcmp( B1[i].name, name) == 0 ){
+			printf("Subject: \n1.Qaida\n2.Islamic Studies\n");
+			scanf("%d",&choice);
+			switch(choice){
+				case 1:
+					printf("Grade(out of 100): ");
+					scanf("%d",&grade);
+					B1[i].gradeQaida = grade;
+					break;
+				case 2:
+					printf("Grade(out of 100): ");
+					scanf("%d",&grade);
+					B1[i].gradeIslamic = grade;
+					break;
+				default:
+					printf("\nInvalid choice");
+
+			}
+			return;
+
+		}
+	}
+
+	createStudent(B1, name, size);			
+
+	printf("Subject: \n1.Qaida\n2.Islamic Studies\n");
+	scanf("%d",&choice);
+	switch(choice){
+		case 1:
+			printf("Grade(out of 100): ");
+			scanf("%d",&grade);								
+			B1[*size-1].gradeQaida = grade;//last added student
+			break;
+		case 2:
+			printf("Grade(out of 100): ");
+			scanf("%d",&grade);
+			B1[*size-1].gradeIslamic = grade;
+			break;
+		default:
+			printf("\nInvalid choice");
+
+
+	}
+
+}
+
+
+void displayGrade(struct madrasah *B1, int *size){
+	printf("Name	|Qaida|Islamic\n");
+
+	for(int i=0; i<*size;i++){
+		printf("%s	|%d   |%d\n",B1[i].name,B1[i].gradeQaida,B1[i].gradeIslamic);
+
+	}
+
+}
+
+
+int main()  
+{  
+	int choice;
+	struct madrasah B1[10];
+	struct madrasah *ptr = B1;
+
+	int classSize=0;
+	int *size = &classSize;
+
+
+	while(1){
+		printf("1. Add Grade\n2. Remove Grade\n3. Display Grades\n4. Find Max/Min Grades\n5. Calculate GPA\n6. Exit\n");
+
+		scanf("%d",&choice);
+
+		switch(choice){
+			case 1:
+				insertGrade(ptr, size);
+				break;
+			case 2:
+				exit(0);
+
+			case 3:
+				displayGrade(ptr, size);
+			default:
+				printf("\nInvalid choice");
+		}
+
+	}
+
+   	return 0;  
+}  

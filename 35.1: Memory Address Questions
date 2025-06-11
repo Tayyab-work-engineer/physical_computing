@@ -181,8 +181,38 @@ The size of the bag structure is 12
 
 Packed Struct
 Use #pragma pack(1) to disable padding. Compare size and offsets to the previous example.
-
 Goal: Contrast performance vs space usage.
+
+How to save memory:
+In GCC you can use __attribute__((packed)) like this:
+// sizeof(x) == 8
+struct x
+{
+    char x;
+    int a;
+};
+
+// sizeof(y) == 5
+struct y
+{
+    char x;
+    int a;
+} __attribute__((packed));
+
+Using the #pragma pack(1) to disable padding:
+
+#pragma pack(push,1)
+struct
+{
+        char a;
+        int b;
+        long long c;
+} foo;
+#pragma pack(pop)
+
+The #pragma pack(push,1) pushes the current packing mode internally, and sets packing to 1, no padding
+The #pragma pack(pop) restores the previous packing. Supposedly compatible with Microsoft's syntax
+
 
 Friday: Debug Memory Issues
 Memory Leak Finder

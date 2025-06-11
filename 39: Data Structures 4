@@ -1,4 +1,9 @@
 Create a queue using array:
+A queue is a first in first out. A queue made with arrays has a fixed size. 
+Two pointers are used, front and rear. They are started with -1, if a item is added,
+front increases to 0 and rear increases to 0. And if another item is added, rear increases to 1.
+If an item is removed, first it is printed then front increases to 1.
+
 
 #include <stdio.h>
 #include <stdlib.h>

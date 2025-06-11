@@ -245,3 +245,107 @@ int main(){
 	return 0;
 }
 
+video 4(Single Linked List (Inserting a Node at the End):
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *link;
+};
+
+void insert(struct node *head, int data){
+    
+    struct node *ptr,*temp;
+    //check if linked list in empty
+    ptr = head;
+    temp = (struct node*)malloc(sizeof(struct node));
+    
+    temp -> data = data;
+    temp -> link = NULL;
+    
+    while(ptr->link != NULL){
+        ptr = ptr->link;
+    }
+    ptr -> link = temp; // last node is pointing to the temp node we created
+    
+}
+
+int main(){
+    struct node *head = malloc(sizeof(struct node)); //lets say returns heap memory address 1000
+    head -> data = 45; //saves 45 into the heap memory for data
+    head -> link = NULL; //saves NULL into the heap memory for link
+
+    struct node *current = malloc(sizeof(struct node));  //lets say returns heap memory address 2000
+    current -> data = 98;
+    current -> link = NULL;
+    head->link = current; //first node points to the second node
+
+    current = malloc(sizeof(struct node));
+    current->data = 3;
+    current->link = NULL;
+
+    head->link->link = current; //second node points to the third node
+
+    insert(head, 1);
+    insert(head, 2);
+    
+
+    return 0;
+}
+
+Video 5( Single Linked List (Inserting a Node at the Beginning) ):
+
+we want to make ptr which will go to the front. So it will have data and the link will be NULL.
+We can set ptr->link = head;
+Then we can do head = ptr;
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *link;
+};
+
+struct node* insert_beg(struct node *head, int data){
+    struct node *ptr = malloc(sizeof(struct node));
+    
+    ptr->data = data;
+    ptr->link = NULL;
+    
+    ptr->link = head;
+    
+    return ptr;
+    
+}
+
+int main(){
+    struct node *head = malloc(sizeof(struct node)); //lets say returns heap memory address 1000
+    head -> data = 45; //saves 45 into the heap memory for data
+    head -> link = NULL; //saves NULL into the heap memory for link
+
+    struct node *current = malloc(sizeof(struct node));  //lets say returns heap memory address 2000
+    current -> data = 98;
+    current -> link = NULL;
+    head->link = current; //first node points to the second node
+
+    current = malloc(sizeof(struct node));
+    current->data = 3;
+    current->link = NULL;
+
+    head->link->link = current; //second node points to the third node
+    count_of_nodes(head);
+    insert(head, 1);
+    insert(head, 2);
+    
+    count_of_nodes(head);
+    
+    head = insert_beg(head,100);
+    
+    
+    count_of_nodes(head);
+
+
+    return 0;
+}

@@ -1,1 +1,107 @@
+Understand dynamic memory usage in data structures.
+
+How to:
+1. Create the structure
+
+struct course {
+  int marks;
+  char subject[30];
+};
+
+2. Create a pointer in main and make it point to a memory block
+struct course *ptr;
+ptr = (struct course *)malloc(n * sizeof(struct course)); //you can choose how much structures you want to store(n)
+
+3. Add the contents, use the ->
+// WRONG (ptr + 0)->subject = "Science";
+strcpy( (ptr+0)->subject, "Science" );
+(ptr + 0)->marks = 50;
+
+
+4. Display
+printf("%s\t%d\n", (ptr + 0)->subject, (ptr + 0)->marks);
+
+
+Full code:
+#include <stdio.h>
+#include <stdlib.h>
+struct course {
+  int marks;
+  char subject[30];
+};
+
+int main() {
+  struct course *ptr;
+  int noOfRecords;
+  printf("Enter the number of records: ");
+  scanf("%d", &noOfRecords);
+
+  // Memory allocation for noOfRecords structures
+  ptr = (struct course *)malloc(noOfRecords * sizeof(struct course));
+  for (int i = 0; i < noOfRecords; ++i) {
+    printf("Enter subject and marks:\n");
+    scanf("%s %d", (ptr + i)->subject, &(ptr + i)->marks);
+  }
+
+  printf("Displaying Information:\n");
+  for (int i = 0; i < noOfRecords; ++i) {
+    printf("%s\t%d\n", (ptr + i)->subject, (ptr + i)->marks);
+  }
+
+  free(ptr);
+
+  return 0;
+}
+
+
+More complex code
+1. Define a Structure
+typedef struct {
+    int id;
+    char name[100];
+    float salary;
+} Employee;
+
+2. Allocating Memory Using malloc()
+Using a function 
+Employee* create_employee(int id, char* name, float salary) {
+    Employee* new_employee = (Employee*)malloc(sizeof(Employee));
+    if (new_employee == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    new_employee->id = id;
+    strcpy(new_employee->name, name);
+    new_employee->salary = salary;
+    return new_employee;
+}
+
+3. Creating an array of pointers to handle multiple Employee records dynamically
+int main() {
+    int num_employees = 5;
+    Employee* employees[num_employees];
+
+    employees[0] = create_employee(1, "Alice", 50000);
+    employees[1] = create_employee(2, "Bob", 60000);
+    employees[2] = create_employee(3, "Charlie", 55000);
+    employees[3] = create_employee(4, "David", 50000);
+    employees[4] = create_employee(5, "Eve", 65000);
+
+    for (int i = 0; i < num_employees; i++) {
+        if (employees[i] != NULL) {
+            printf("ID: %d, Name: %s, Salary: %.2f\n",
+                    employees[i]->id, employees[i]->name, employees[i]->salary);
+        }
+    }
+
+    // Cleanup
+    for (int i = 0; i < num_employees; i++) {
+        free(employees[i]);
+    }
+
+    return 0;
+}
+
+
+
 

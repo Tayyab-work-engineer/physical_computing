@@ -1,1 +1,168 @@
+Implement a circular queue
+A circular queue has its first element connected with its last element thus forming a circle.
 
+It fixes the problem with normal queues. In a normal queue, when an item is dequeued, the front pointer
+moves, from 0 to 1, and then from 1 to 2. The values are 0 and 1, 2, stay there and front pointer just increases.
+
+Applications of Circular Queue
+CPU scheduling
+Memory management
+Traffic Management
+
+Important functions
+int isFull(){
+    if ( front == (rear + 1) % SIZE || (front == 0 && rear == SIZE - 1))
+        return 1;
+    
+    return 0;
+    
+}
+
+The two cases that will tell us if the queue is full or not:
+1. front == (rear + 1) % SIZE:
+This handles the circular wrap-around case. If rear is 
+just behind front, then the queue is full.
+Ex:
+Queue: [E, F, G, H, -]
+Index:   0  1  2  3  4
+front = 2
+rear  = 1
+
+rear + 1 = 2, and 2 % 5 = 2, which equals front.
+
+So, the condition front == (rear + 1) % SIZE is true.
+
+Queue is full, even though some parts of the array look 
+empty—this is because it's circular.
+
+2.front == 0 && rear == SIZE - 1:
+This checks the simple linear fill case—when elements 
+fill the array from start to end without wrapping around.
+Ex:
+Queue: [A, B, C, D, E]
+Index:   0  1  2  3  4
+front = 0
+rear  = 4
+
+This is a straight fill from index 0 to 4.
+
+So, front == 0 && rear == SIZE - 1 is true.
+
+Queue is full.
+
+Another example:
+Queue: [A, B, -, -, -]
+Index:   0  1  2  3  4
+front = 0
+rear  = 1
+
+(rear + 1) % SIZE = 2, which is not equal to front = 0.
+
+front == 0 && rear == 4 → false.
+
+Queue is not full.
+
+Implement the queue:
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h> // Needed for strcpy
+
+#define SIZE 5
+
+int items[SIZE];
+int front = -1, rear = -1;
+
+//check if the queue is full
+
+int isFull(){
+    if ( front == (rear + 1) % SIZE || (front == 0 && rear == SIZE - 1))
+        return 1;
+    
+    return 0;
+    
+}
+
+int isEmpty(){
+    if (front==-1) return 1;
+    
+    return 0;
+}
+
+void enQueue(int element){
+    if (isFull())
+        printf("\nFull \n");
+    else{
+        if (front == -1) front = 0;
+        rear = (rear + 1) % SIZE; // (4 + 1) % 5 = 0, Not rear = rear + 1, Which is 5
+        items[rear] = element;
+        printf("\n Inserted -> %d", element);
+
+    }
+    
+    
+}
+
+int deQueue(){
+    int element;
+    if ( isEmpty() ) {
+        printf("\nEmpty\n");
+        return (-1);
+        
+    }else{
+        element = items[front];
+        if (front == rear){ // front = rear = 2; then queue is empty so set both to -1
+            front = -1;
+            rear = -1;
+        }
+        else{
+            front = (front+1) % SIZE; // so it doesn't go past the size
+        }
+        printf("\n Deleted element -> %d \n", element);
+        return (element);
+    }
+    
+    
+}
+
+// display the queue
+void display() {
+  int i;
+  if (isEmpty())
+    printf(" \n Empty Queue\n");
+  else {
+    printf("\n Front -> %d ", front);
+    printf("\n Items -> ");
+    for (i = front; i != rear; i = (i + 1) % SIZE) {
+      printf("%d ", items[i]);
+    }
+    printf("%d ", items[i]);
+    printf("\n Rear -> %d \n", rear);
+  }
+}
+
+int main() {
+    
+    deQueue();
+    
+    enQueue(1);
+    enQueue(2);
+    enQueue(3);
+    enQueue(4);
+    enQueue(5);
+    enQueue(6);
+
+    display();
+    deQueue();
+    
+    display();
+    enQueue(7);
+    display();
+    enQueue(8);
+    
+    return 0;
+}
+
+
+Priority Queue:
+Each element is given a priority and it is dequeued depending on the priority.
+If it has higher priority then it will be dequeued first.

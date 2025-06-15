@@ -130,35 +130,63 @@ Procedure:
 3. Update the top pointer and make it to point to the new node of the linked list.
 
 Coding:
-struct node* newNode; //create a new node
-newNode = malloc(sizeof(newNode));
-newNode->data = data;
-newNode->link = NULL;
+functions.c
 
-newNode->link = top; //Put the address of the first node(34) in the link part of the new node
 
-top = newNode;//Update the top pointer and make it to point to the new node of the linked list.
-
-Complete function
-void push(int data){
-    struct node* newNode;
-    newNode = malloc(sizeof(newNode));
-    if(newNode==NULL){
-        printf("Stack overflow.");
-        exit(1);
-
+void push(linkedList *list, int data){
+    struct node *new_node = malloc(sizeof(struct node));
+    
+    new_node->data = data;
+    new_node->link = NULL;
+    
+    if (list->head == NULL){
+        list->head = new_node;
     }
-    newNode->data = data;
-    newNode->link = NULL;
-
-    newNode->link = top;
-    top = newNode;
+    else{
+        struct node *temp;
+        temp = list -> head;
+        new_node -> link = temp;//point the new node to the previous head
+        list->head = new_node; // change the head to point to the start of the list
+        
+    }
+    list->count++;
+    
 }
 
-final vid: (https://www.youtube.com/watch?v=311qJJHiQjU)
+void pop(linkedList *list){
+    if(list->head==NULL){
+        printf("List is already empty!");
+    }else{
+        struct node *new_node;
+        //WRONG new_node -> link = list->head;
+        new_node = list->head;
+        
+        list->head = list->head->link;
+        
+        free(new_node);
+    }
+    
+}
+
+code.c
+int main(){
+    linkedList l1;
+    init_list(&l1);
+    
+    push(&l1, 78);
+    push(&l1, 21);
+    push(&l1, 34);
+
+    pop(&l1);
+    pop(&l1);
+
+    printf("%d\n", l1.head->data); //print 21
 
 
 
+    
+    return 0;
+}
 
 
 

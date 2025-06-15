@@ -349,3 +349,53 @@ int main(){
 
     return 0;
 }
+
+Being able to make multiple lists:
+code.c
+int main(){
+	linkedList l1;
+	init_list(&l1);
+	insert(&l1, 45);
+	insert(&l1, 98);
+	printf("%d\n", l1.head->data);
+	
+	printf("%d\n", l1.head->link->data);
+	return 0;
+}
+
+struct node{
+	char data;
+	struct node *link;
+};
+
+typedef struct{
+	struct node* head;
+	int count;
+}linkedList;
+
+void init_list(linkedList* list){
+	list->head = NULL; // first head set to zero
+	list->count = 0;
+}
+
+void insert(linkedList *list, int data({
+	struct node* new_node = malloc(sizeof(struct node));
+
+	new_node -> data = data;
+	new_node -> link = NULL;
+
+	if (list->head == NULL){
+		list -> head = new_node;
+	}
+	else{
+		struct node* temp = list->head; //create temp node and make it start at the beginning
+		while(temp->link != NULL){
+			temp = temp->link; //keep moving on the list
+		}
+		temp->link = new_node;
+	}
+	list->count++; //once inserted, increase the count
+
+}
+
+

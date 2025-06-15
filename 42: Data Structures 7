@@ -1,1 +1,57 @@
+Mini project — Build a basic CLI task manager.
+
+functions:
+Add task
+Remove task
+Put a complete task
+View tasks
+
+
+I am going to use stacks to store what tasks I have.
+ID | Complete | Task
+1  | X        | Daily C program
+2  |          | Review C program
+
+
+I am going to use queues to store the order I want to do the task.
+Queues use a FIFO. So the first task I enter should be the first task I do, 
+then the second task I enter should be the second task that I want to do.
+
+Program function:
+Command: Add task(Enqueue using stack)
+Enter: Read Quran
+Enter: Do C program
+Enter: Apply to jobs.
+
+Command: View task: These are your tasks for the day:
+1. Read Quran
+2. Do C program
+3. Apply to jobs.
+
+Command: Order the task, What do you want to do first today:
+2
+What do you want to do (2):
+3
+What do you want to do (3):
+1
+
+Complete Task (Dequeue)
+View Task:
+Apply to jobs
+Read Quran
+
+Use different linked list for different types of tasks.
+linkedList interview_practise
+linkedList apply_job
+
+insert(&interview_practise, practise previous questions)
+insert(&interview_practise, watch vinh giang)
+insert(&interview_practise, research company)
+
+insert(&apply_job, look for companies)
+insert(&apply_job, choose best one/make cv)
+
+
+
+
 

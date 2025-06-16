@@ -78,3 +78,51 @@ int main(){
 
 
 Implement selection sort.
+
+You have unsorted elements on the left hand side and 
+sorted elements on the right.
+The program goes through the array and selects the smallest
+element in the remaining unsorted list and swap it at the current
+index.
+
+Ex: 5, 2, 7, 1
+
+Select 5 as the index.
+The program goes through each element and finds the smallest which is
+1 and will swap it with the 5.
+
+   1, 2, 7, 5
+   |
+Sorted
+
+
+1, 2, 7, 5
+   |
+ sorted
+
+1, 2, 5, 7
+      |
+     sorted
+
+1, 2, 5, 7
+Finish.
+
+Code:  (https://www.youtube.com/watch?v=YepJ7fDmyjI)
+void selectionSort(int arr[], int length){
+    for (int i = 0; i < length - 1; i++){
+        int min_pos = i;//index to swap
+        
+        for(int j = i+1; j<length; j++){ //compare j with others in the list (i+1)
+            if (arr[j] < arr[min_pos]){
+                min_pos = j;
+            }
+        }
+        if (min_pos != i){//swap if necessary
+            int temp = arr[min_pos];
+            arr[min_pos] = arr[i];//arr[j] is the smallest
+            arr[i] = temp; //swapped
+        }
+        
+    }
+    
+}

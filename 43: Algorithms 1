@@ -1,0 +1,80 @@
+Implement bubble sort :
+What is bubble sort?
+It is a sorting algorithm that has a O(n^2) complexity that puts a list
+into increasing or decreasing order.
+For increasing order:
+It compares adjacent elements and if a[j] > a[j+1], it will move the first
+element infront of the second element. It will keep comparing the adjacent
+elements until the end of the list. Then it will go around again until the whole length
+or until it goes around and there were no swaps.
+
+Ex: 5, 2, 7, 1
+1 Round:
+2, 5, 7, 1
+2, 5, 7, 1
+2, 5, 1, 7
+
+2 Round:
+2, 5, 1, 7
+2, 1, 5, 7
+2, 1, 5, 7
+
+3 Round:
+1, 2, 5, 7
+1, 2, 5, 7
+1, 2, 5, 7
+
+Make the code better:
+Ex: 5, 2, 7, 1
+1 Round:
+2, 5, 7, 1
+2, 5, 7, 1
+2, 5, 1, 7
+(3 times)
+
+2 Round:
+2, 5, 1, 7
+2, 1, 5, 7
+// STOP not need for : 2, 1, 5, 7
+(2 times)
+
+3 Round:
+1, 2, 5, 7
+(Stop)
+(1 time)
+
+Code:
+
+void bubbleSort(int arr[], int length){
+    for (int i = 0; i< length -1; i++){
+        //#include <stdbool.h>
+        bool swapped = false;
+        for(int j=0; j<length-i-1;j++){
+            if (arr[j] > arr[j+1]){
+                int temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+                swapped = true;
+            }
+        }
+        if (swapped == false)
+                break;
+    }
+}
+
+
+int main(){
+    int arr[4] = {5, 2, 7, 1};
+    int length = sizeof(arr)/sizeof(arr[0]);
+    
+    bubbleSort(arr, length);
+    
+    for (int i = 0; i < length; i++)
+        printf("%d ", arr[i]);
+    return 0;
+    
+    return 0;
+}
+
+
+Implement selection sort.

@@ -1,1 +1,43 @@
-Implement insertion sort and understand time complexity.
+Implement insertion sort:
+What is insertion sort? 
+Ex:
+12 , 11 , 13 , 5 , 6
+Make 11 the key because we can say that 12 is in the sorted part.
+Compare the key with the sorted element. 11 is smaller than 12 so
+we can swap it.
+11 , 12 , 13 , 5 , 6
+Now make 13 the key, we compare the key with 12, however 12 is smaller
+than 13 so we don't need to do the swap.
+11 , 12 , 13 , 5 , 6
+Now make 5 the key, we compare the key with 13, 5 is smaller so we swap,
+now compare with 12, and so we swap and compare with 11 so we swap. There
+are no more elements on the left so no more comparison.
+5, 11 , 12 , 13 , 6
+So the same with the 6.
+Final: 
+5, 6 , 11 , 12 , 13
+
+Insertion Sort Algorithm in C
+Start with the second element (index 1) as the key.
+Compare the key with the elements before it.
+If the key is smaller than the compared element, shift the compared element one position to the right.
+Insert the key where the shifting of elements stops.
+Repeat steps 2-4 for all elements in the unsorted part of the list.
+
+Time Complexity: O(N2)
+Auxiliary Space: O(1)
+
+Advantages of Insertion Sort
+Insertion sort is that it is an in-place sorting algorithm.
+It is simple to implement which is great for small datasets.
+Insertion sort is adaptive in nature, i.e. it is appropriate for data sets which are already partially sorted.
+Best-case scenario only requires O(n) time.
+
+
+Implementation:
+
+
+
+
+
+Understand time complexity.

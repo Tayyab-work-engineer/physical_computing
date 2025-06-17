@@ -35,9 +35,64 @@ Best-case scenario only requires O(n) time.
 
 
 Implementation:
-
-
-
+void insertionSort(int arr[], int length){
+    for(int i=1; i<length;i++){
+        int key = arr[i]; //11
+        
+        int j = i - 1;
+        while(j >= 0 && arr[j] > key){//then you swap
+            arr[j+1] = arr[j];
+            j = j - 1;
+            
+        }
+        printf("%d\n", j);
+        arr[j+1] = key; // arr[0] = 11. successfully swapped
+    }
+    
+}
 
 
 Understand time complexity.
+Q. Imagine a classroom of 100 students in which you gave your pen 
+to one person, he lost it. You have to find that pen. 
+
+Normally, you would stand up in the class and shout has anyone seen my pen
+This step would be a constant time, no matter how many people in the class.
+
+But if you Go and ask each student individually is O(N). 
+
+O(log n): Now I divide the class into two groups, then ask: "Is it on the left side, 
+or the right side of the classroom?" Then I take that group and divide it into two 
+and ask again, and so on. Repeat the process till you are left with one 
+student who has your pen. This is what you mean by O(log n). 
+
+Step-by-step (O(log n)):
+Divide the class in half (e.g., 50 students on the left, 50 on the right).
+
+Ask someone (or check somehow):
+"Is the pen on the left side or the right side?"
+Let's say it's on the left.
+
+Ignore the right side completely.
+
+Now divide the left side again (25 left, 25 right).
+
+Ask again: "Which half has the pen?"
+
+Keep repeating this process — dividing the group in half and focusing only on the side that might have the pen.
+
+Eventually, you’re left with one student — the one who has your pen.
+
+Why is this O(log n)?
+Because each time you cut the number of students in half:
+
+100 → 50 → 25 → 12 → 6 → 3 → 1
+That’s about log₂(100) ≈ 7 steps.
+
+O(n²) – Nested Search
+You ask Student 1: “Do you have the pen? And do you know if anyone else has it?”
+Then you ask Student 2 the same thing about everyone else.
+You repeat this for all 100 students.
+
+And its uses:
+

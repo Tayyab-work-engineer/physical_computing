@@ -1,1 +1,110 @@
 Implement quicksort with recursion and partitioning.
+
+What is quick sort?
+1. Uses a pivot
+2. One side of the pivot places the values that are less than the pivot and the other
+side are values greater than pivot. So two sub arrays.
+3. The sub arrays are then sorted recursively.
+4. This process continues until the entire array is sorted.
+
+Ex: 4, 2, 5, 3, 1
+
+The low value [0] is 4 and the high value [length - 1] is `
+You select the high value as the pivot.
+
+
+Step 1:
+Select the pivot
+ 4, 2, 5, 3, [1]
+
+Step 2:
+             [1] 4 2 5 3
+
+Step 3,Call the function again which selects the next pivots for the two arrays:
+One for the 0 to pivot-1 and the other for pivot+1 to high
+[1] 4 2 5 [3]
+
+Step 4: Sort the arrays
+[1] 2 [3]  4 5
+
+Time Complexity: O(n logn), where n is the size of the array.
+Auxiliary Space: O(log n), considering auxiliary stack space.
+
+Implementation: (Geeks4Geeks)
+#include <stdio.h>
+#include <stdlib.h>
+
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+
+int partition(int arr[], int low, int high){
+
+	int p = arr[low];//select first element as pivot
+
+	int i = low;
+	int j = high;
+
+	//  p    	j
+	//  4, 2, 5, 3, 1 
+	//  i
+
+	while (i<j){
+		while (arr[i] <= p && i<=high-1){
+			i++;
+		} 
+		//  p    	j
+		//  4, 2, 5, 3, 1 
+		//        i
+
+
+
+		while (arr[j] > p && j >= low +1){
+			j--;
+		}
+		//  p    	j
+		//  4, 2, 5, 3, 1 
+		//        i
+
+		if(i<j){ // true
+			swap(&arr[i], &arr[j]);
+		}
+
+	}
+	
+	swap(&arr[low], &arr[j]); // the pivot goes to its rightful place
+	return j;
+	
+
+}
+
+
+void quickSort(int arr[], int low, int high){
+	//repeat the quick sort if low is less than high
+	if (low<high){
+
+		int pi = partition(arr, low, high);
+
+       	 	quickSort(arr, low, pi - 1);
+        	quickSort(arr, pi + 1, high);
+
+	}
+}
+
+
+int main(){
+
+	int arr[] = {4, 2, 5, 3, 1};
+	int n = sizeof(arr) / sizeof(arr[0]);
+
+	quickSort(arr, 0, n-1);
+
+	for (int i=0;i<n;i++){
+		printf("%d ", arr[i]);
+	}
+	return 0;
+
+}

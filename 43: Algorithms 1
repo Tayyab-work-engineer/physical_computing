@@ -44,36 +44,43 @@ Ex: 5, 2, 7, 1
 (1 time)
 
 Code:
+#include <stdio.h>
+#include <stdlib.h>
 
-void bubbleSort(int arr[], int length){
-    for (int i = 0; i< length -1; i++){
-        //#include <stdbool.h>
-        bool swapped = false;
-        for(int j=0; j<length-i-1;j++){
-            if (arr[j] > arr[j+1]){
-                int temp = arr[j];
-                arr[j] = arr[j+1];
-                arr[j+1] = temp;
-                swapped = true;
-            }
-        }
-        if (swapped == false)
-                break;
-    }
+#include <stdbool.h>
+
+void bubbleSort(int a[], int n){
+
+	for(int i=0;i<n-1; i++){ //i goes up to n-1 because
+		
+		bool swapped = false;
+		for(int j=0;j<n-i-1; j++){ //j goes up to n-i-1 because
+			if(a[j] > a[j+1]){
+				int temp = a[j+1];
+				a[j+1] = a[j];
+				a[j] = temp;
+				swapped = true;
+			}
+
+		}
+		if (swapped == false)
+			break;
+
+	}
 }
 
-
 int main(){
-    int arr[4] = {5, 2, 7, 1};
-    int length = sizeof(arr)/sizeof(arr[0]);
-    
-    bubbleSort(arr, length);
-    
-    for (int i = 0; i < length; i++)
-        printf("%d ", arr[i]);
-    return 0;
-    
-    return 0;
+
+	int arr[] = {4, 2, 5, 3, 1};
+	int n = sizeof(arr) / sizeof(arr[0]);
+
+	bubbleSort(arr, n);
+
+	for (int i=0;i<n;i++){
+		printf("%d ", arr[i]);
+	}
+	return 0;
+
 }
 
 
@@ -108,21 +115,41 @@ Sorted
 Finish.
 
 Code:  (https://www.youtube.com/watch?v=YepJ7fDmyjI)
-void selectionSort(int arr[], int length){
-    for (int i = 0; i < length - 1; i++){
-        int min_pos = i;//index to swap
-        
-        for(int j = i+1; j<length; j++){ //compare j with others in the list (i+1)
-            if (arr[j] < arr[min_pos]){
-                min_pos = j;
-            }
-        }
-        if (min_pos != i){//swap if necessary
-            int temp = arr[min_pos];
-            arr[min_pos] = arr[i];//arr[j] is the smallest
-            arr[i] = temp; //swapped
-        }
-        
-    }
-    
+void selectionSort(int a[], int n){
+	for(int i=0; i<n-1; i++){
+		int index = i; //index to swap
+
+		for (int j=i+1;j<n;j++){
+
+			if(a[j]<a[index]){
+				index = j;
+			}
+
+		}
+
+		if (index !=i){ //if index does change the
+			int temp = a[index]; //index = j
+			a[index] = a[i];
+			a[i] = temp;
+
+		}
+
+	}
+
 }
+
+
+Some explanation:
+for this part 
+int index = i; //index to swap
+
+		for (int j=i+1;j<n;j++){
+
+			if(a[j]<a[index]){
+				index = j; //index will keep holding the smallest value
+			}
+
+		}
+        //a = {5, 3, 4, 1, 2}
+        //after loop index = 3
+        //then you swap 5 with 1.

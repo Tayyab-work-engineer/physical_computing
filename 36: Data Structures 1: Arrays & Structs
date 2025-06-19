@@ -118,190 +118,41 @@ output:
 5 e
 
 
-Mini project: Student Management System (Array of Structures)
-Objective:
-Create a simple student management system that allows a user to:
-1. Add students
-2. Display all student records
-3. Search for a student by name
+Task:
+Create a program that stores information about 3 students using a structure. 
+Each student has a name, roll number, and three test scores.
+Use an array of structures to store the students and display the average marks for each.
 
-Let's build the addStudent() function step by step.
-Since you’re using an array of structures, addStudent() needs to:
-1. Take user input for the student's name, age, parent's name, and email.
-2. Store the data in the class array at the current index.
-3. Increment the totalStudents counter.
 
+Code:
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
 
-#define MAX_STUDENTS 30
-
-
-struct Student {
-    char name[30];
-    int age;
-    char parent_name[30];
-    char email[50];
-};
-
-struct Student class[MAX_STUDENTS];
-int totalStudents = 0;
-
-void addStudent(){
-	if (totalStudents>=MAX_STUDENTS){
-	        printf("Cannot add more students. Limit reached.\n");
-        	return;
-	}
-	printf("Enter student name: ");
-	fgets(class[totalStudents].name, sizeof(class[totalStudents].name), stdin);
-	class[totalStudents].name[strcspn(class[totalStudents].name, "\n")] = '\0';// Remove newline
-
-	printf("Enter age: ");
-	scanf("%d", &class[totalStudents].age);
-	getchar();// Consume leftover newline from input buffer
-
-	printf("Enter parent's name: ");
-	fgets(class[totalStudents].parent_name, sizeof(class[totalStudents].parent_name), stdin);
-    	class[totalStudents].parent_name[strcspn(class[totalStudents].parent_name, "\n")] = '\0';
-
-	printf("Enter email: ");
-    	fgets(class[totalStudents].email, sizeof(class[totalStudents].email), stdin);
-   	class[totalStudents].email[strcspn(class[totalStudents].email, "\n")] = '\0';
-
-    	printf("Student added successfully.\n");
-    	totalStudents++;
+struct Student{
+	char name[20];
+	int rollNumber;
+	int maths;
+	int english;
+	int science;
 
 };
 
-void displayStudents(){
+int main(){
+	struct Student students[3] = {
+        	{"Tayyab", 1 , 50, 100, 20},
+        	{"Abdullah", 2, 70, 80, 90},
+        	{"Max", 3, 60, 75, 85}
 
-};
-void searchStudent(){
+	};
 
-};
+	for (int i = 0; i < 3; i++) {
+        	int total = students[i].maths + students[i].english + students[i].science;
+        	float average = total / 3.0;
 
+        	printf("Name: %s\n", students[i].name);
+        	printf("Roll Number: %d\n", students[i].rollNumber);
+        	printf("Average Marks: %.2f\n\n", average);
+    	}
+	return 0;
 
-int main() {
-    int choice;
-    do {
-        printf("\nStudent Management System\n");
-        printf("1. Add Student\n");
-        printf("2. Display All Students\n");
-        printf("3. Search Student by Name\n");
-        printf("4. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-        getchar(); // to consume the newline
-
-        switch(choice) {
-            case 1: addStudent(); break;
-            case 2: displayStudents(); break;
-            case 3: searchStudent(); break;
-            case 4: printf("Exiting...\n"); break;
-            default: printf("Invalid choice\n");
-        }
-    } while(choice != 4);
-
-    return 0;
 }
-
-__________________________________________________________________________________
-FInal:
-#include <stdio.h>
-#include <string.h>
-
-#define MAX_STUDENTS 30
-
-
-struct Student {
-    char name[30];
-    int age;
-    char parent_name[30];
-    char email[50];
-};
-
-struct Student class[MAX_STUDENTS];
-int totalStudents = 0;
-
-void addStudent(){
-	if (totalStudents>=MAX_STUDENTS){
-	        printf("Cannot add more students. Limit reached.\n");
-        	return;
-	}
-	printf("Enter student name: ");
-	fgets(class[totalStudents].name, sizeof(class[totalStudents].name), stdin);
-	class[totalStudents].name[strcspn(class[totalStudents].name, "\n")] = '\0';// Remove newline
-
-	printf("Enter age: ");
-	scanf("%d", &class[totalStudents].age);
-	getchar();// Consume leftover newline from input buffer
-
-	printf("Enter parent's name: ");
-	fgets(class[totalStudents].parent_name, sizeof(class[totalStudents].parent_name), stdin);
-    	class[totalStudents].parent_name[strcspn(class[totalStudents].parent_name, "\n")] = '\0';
-
-	printf("Enter email: ");
-    	fgets(class[totalStudents].email, sizeof(class[totalStudents].email), stdin);
-   	class[totalStudents].email[strcspn(class[totalStudents].email, "\n")] = '\0';
-
-    	printf("Student added successfully.\n");
-    	totalStudents++;
-
-};
-
-void displayStudents(){
-	printf("Student|Age|Parent|Email\n");
-	for(int i = 0; i < totalStudents;i++){
-		printf("%s|",&class[i].name);
-		printf("%d|",class[i].age);
-		printf("%s|",&class[i].parent_name);
-		printf("%s|",&class[i].email);
-		printf("\n");
-	}
-};
-void searchStudent(){
-	char name[50];
-	printf("Enter Name of Student: ");
-	scanf("%s",&name);
-
-	for(int i = 0; i<totalStudents; i++){
-		if( strcmp(name, class[i].name) == 0 ){
-			printf("Student found\n");
-			printf("Name: %s\n", class[i].name);
-        		printf("Age: %d\n", class[i].age);
-        		printf("Parent: %s\n", class[i].parent_name);
-        		printf("Email: %s\n", class[i].email);
-			return;
-		}
-
-	}
-	printf("Student not found\n");
-
-};
-
-
-int main() {
-    int choice;
-    do {
-        printf("\nStudent Management System\n");
-        printf("1. Add Student\n");
-        printf("2. Display All Students\n");
-        printf("3. Search Student by Name\n");
-        printf("4. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-        getchar(); // to consume the newline
-
-        switch(choice) {
-            case 1: addStudent(); break;
-            case 2: displayStudents(); break;
-            case 3: searchStudent(); break;
-            case 4: printf("Exiting...\n"); break;
-            default: printf("Invalid choice\n");
-        }
-    } while(choice != 4);
-
-    return 0;
-}
-
-

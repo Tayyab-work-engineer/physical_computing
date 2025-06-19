@@ -22,7 +22,7 @@ they are are not in the right place.
              [3, 9, 10, 27, 38, 43, 82]
 
 
-Implementation:
+Implementation: (https://www.youtube.com/watch?v=YjxKYxpf51E)
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -145,12 +145,6 @@ void merge_sorted_arrays(int a[], int l, int m, int r){
 
 
 
+compare merge sort with quicksort (https://www.youtube.com/watch?v=Jjrk4OqZ2VY)
 
-
-
-
-
-
-
-compare merge sort with quicksort.
 

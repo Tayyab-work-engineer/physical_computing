@@ -27,13 +27,6 @@ Repeat steps 2-4 for all elements in the unsorted part of the list.
 Time Complexity: O(N2)
 Auxiliary Space: O(1)
 
-Advantages of Insertion Sort
-Insertion sort is that it is an in-place sorting algorithm.
-It is simple to implement which is great for small datasets.
-Insertion sort is adaptive in nature, i.e. it is appropriate for data sets which are already partially sorted.
-Best-case scenario only requires O(n) time.
-
-
 Implementation:
 void insertionSort(int arr[], int length){
     for(int i=1; i<length;i++){

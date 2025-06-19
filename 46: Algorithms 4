@@ -1,0 +1,156 @@
+Implement mergesort:
+What is merge sort?
+
+How does it work?
+Uses the divide and conquer approach. First we divide up the array into smaller and smaller sub arrays.
+Until we are left with one element in an array which is like a sorted. Then we merge the two sorted arrays
+next to each other.
+
+Ex:
+              [38, 27, 43, 3, 9, 82, 10]
+7/2 = 3.5, round it to be 4
+
+              [38, 27, 43, 3]          [9, 82, 10]
+        [38, 27]         [43, 3]       [9, 82]     [10]
+        [38]  [27]     [43]   [3]    [9]   [82]    [10]
+
+Now you merge them, by comparing the two element and swapping them if 
+they are are not in the right place.
+
+        [27, 38]     [3, 43]    [9, 82]    [10]
+          [3, 27, 38, 43]         [9, 10, 82]
+             [3, 9, 10, 27, 38, 43, 82]
+
+
+Implementation:
+#include <stdio.h>
+#include <stdlib.h>
+
+void merge_sort(int a[], int length){
+
+
+
+}
+
+void merge_sort_recursion(int a[], int l, int r){
+
+
+}
+
+void merge_sorted_arrays(int a[], int l, int m, int r){
+
+
+}
+
+
+int main(){
+
+	int arr[] = {4, 2, 5, 3, 1};
+	int n = sizeof(arr) / sizeof(arr[0]);
+
+	mergeSort(arr, n);
+
+	for (int i=0;i<n;i++){
+		printf("%d ", arr[i]);
+	}
+	return 0;
+
+}
+
+The different functions:
+void merge_sort(int a[], int length){
+	merge_sort_recursion(a, 0, length - 1);
+
+}
+
+void merge_sort_recursion(int a[], int l, int r){
+
+	if (l<r){
+	{
+		int m = l + (r-l) /2; //get the middle
+		merge_sort_recursion(a, l, m);
+		merge_sort_recursion(a, m+1, r);
+	
+		merge_sorted_arrays(a, l, m, r);	
+		//when to stop?use if loop when l<r
+	}
+
+}
+
+
+
+void merge_sorted_arrays(int a[], int l, int m, int r){
+	
+	//length of each portion of the array
+	int left_length = m-1 + 1;
+	int right_length = r - m; // right index - mid index
+
+	//merge sort, create two temp sub arrays
+	int temp_left[left_length];
+	int temp_right[right_length];
+
+	int i,j,k;
+	for (int i=0; i<left_length;i++){
+		temp_left[i] = a[l + i]; //making sure we are copying the portion of array we are concerned with
+
+	}
+
+	for (int i=0; i<right_length;i++){
+		temp_right[i] = a[m + 1 + i];
+
+	}
+//		       i
+	// temp_left:  4, 9, 12
+
+//		       j
+	// temp_right: 5, 8, 14
+
+	//             k
+	//          a:4
+
+//temp_left[i] <= temp_right[j]	
+//a[k] = 4 and i++ so i=1 and
+
+//repeat
+
+//		          i
+	// temp_left:  4, 9, 12
+
+//		          j
+	// temp_right: 5, 8, 14
+
+	//             k
+	//          a: 8
+
+//temp_left[i] <= temp_right[j]	
+//a[k] = 5 and j++ so j=1
+
+//now a[k] = {4, 5};
+	for (i = 0; j = 0, k = l; k<= r; k++){ // k is keeping track of our place in array a, we are going from left index to the right most index
+		
+		if ( (i < left_length ) && (j>=right_length) || temp_left[i] <= temp_right[j] ) {
+			a[k] = temp_left[i];
+			i++;
+		}
+		else{
+			a[k] = temp_right[j];
+			j++; 
+		}
+		
+
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+compare merge sort with quicksort.
+

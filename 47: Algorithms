@@ -1,1 +1,12 @@
-Filtering: Write programs to filter even/odd numbers or search in arrays using pointers.
+Filtering: Write programs to filter even/odd numbers
+Remove Even Integers from Array
+Example: 1
+arr = [-1, 5, -2, -1, -2]
+output = [-1, 5, -1]
+
+Example: 2
+arr = [8, 1, 9, 7]
+output = [1, 9, 7]
+
+
+Search in arrays using pointers.

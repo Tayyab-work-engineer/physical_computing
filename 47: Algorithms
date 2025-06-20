@@ -8,5 +8,108 @@ Example: 2
 arr = [8, 1, 9, 7]
 output = [1, 9, 7]
 
+#include <stdio.h>
+#include <stdlib.h>
 
-Search in arrays using pointers.
+#include <stdbool.h>
+
+int removeEven(int arr[], int* size){
+	int newSize=0;
+
+	for(int i=0; i<*size; i++){
+		if(arr[i]%2 != 0){
+			arr[newSize] = arr[i];
+			newSize++;
+
+		}
+	}
+	*size = newSize;
+	
+	return arr[0];
+}
+
+int main(){
+
+	int arr[5] = {-1, 5, -2, -1, -2};
+	int length = 5;
+
+	removeEven(arr, &length);
+	for (int i=0; i<length;i++){
+		printf("arr[%d] = %d\n",i,arr[i]);
+
+	}
+	
+
+}
+
+Search for items in array
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <stdbool.h>
+
+
+int linearSearch(int arr[], int length, int item){
+
+	for(int i =0; i<length; i++){
+		if(arr[i] == item){
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int main(){
+
+	int arr[5] = {-1, 5, -2, -1, -2};
+	int length = 5;
+	int search = 1;
+	int found = 0;
+
+	found = linearSearch(arr, length ,search);
+	if (found == 0){
+
+		printf("Item not found\n");
+	}
+	else{
+		printf("Item found\n");
+
+
+	}
+}
+
+Binary Search:
+What is binary search?
+The binary search is a efficient way of finding items in a SORTED list. The steps:
+Lets say you want to find 1 in this list: 1,2,3,4,5,6,7,8,9,10
+1. Select the mid items and compare it. 5 is not the item and its bigger than the item.
+2. Discard 5 and all items greater than it.
+1,2,3,4
+3. Now repeat step 1 with the new list
+4. Eventually you will find the item.
+
+
+Code:
+int binarySearch(int arr[], int search, int l, int r){
+	int mid = l + (r-l)/2;
+
+	if (l>r){
+		return 0;
+	}
+
+	if(arr[mid] == search){
+		return mid;
+	}
+	else if (arr[mid] > search){
+		binarySearch(arr, search, l, mid-1);
+	}
+	else{
+		binarySearch(arr, search, mid+1 , r);
+
+	}
+}
+
+
+
+
+

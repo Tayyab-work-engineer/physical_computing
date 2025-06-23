@@ -15,3 +15,78 @@ void loop() {
   Serial.println(sensorValue);
   delay(1);
 }
+
+//Fan project
+
+#include <MKRMotorCarrier.h>
+
+const int button = 2;
+
+void setup() 
+{
+  Serial.begin(115200);
+  while (!Serial);
+
+  if (controller.begin()) 
+  {
+    Serial.print("MKR Motor Shield connected, firmware version ");
+    Serial.println(controller.getFWVersion());
+  } 
+  else 
+  {
+    Serial.println("Couldn't connect! Check the red LED.");
+    while (1);
+  }
+
+  Serial.println("Rebooting motor controller...");
+  controller.reboot();
+  delay(500);
+
+  float batteryVoltage = (float)battery.getConverted();
+  Serial.print("Battery voltage: ");
+  Serial.print(batteryVoltage);
+  Serial.print("V, Raw ");
+  Serial.println(battery.getRaw());
+
+  pinMode(button, INPUT_PULLUP);
+}
+
+void loop() 
+{
+  int sensorValue = analogRead(A0);
+  Serial.println(sensorValue);
+    // Map to motor duty cycle (e.g., 0 to 100)
+  int duty = map(sensorValue, 400, 600, 0, 100);
+    
+  Serial.println(duty);
+
+  delay(1);
+
+  float batteryVoltage = (float)battery.getConverted();
+  if (batteryVoltage < 5) 
+  {
+    Serial.println("WARNING: LOW BATTERY - STOPPING MOTOR");
+    M1.setDuty(0);
+    while (batteryVoltage < 11) 
+    {
+      batteryVoltage = (float)battery.getConverted();
+      delay(500);
+    }
+  } 
+  else 
+  {
+    if (digitalRead(button) == LOW) {
+      // Spin forward
+      M1.setDuty(sensorValue);
+      Serial.print("M1 Duty: ");
+      Serial.println(duty);  // Print the actual duty value
+    }
+    else {
+      M1.setDuty(0);  // Stops motor connected to M1
+    }
+
+    // Maintain communication with the carrier
+    controller.ping();
+    delay(50);
+  }
+}

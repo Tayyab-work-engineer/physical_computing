@@ -1,0 +1,119 @@
+Implement a function that filters data based on user input (e.g., filter > x).
+
+user input: select grades > 70
+user input: select grades < 30
+
+Code:
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+
+struct student{
+	char name[20];
+	int grade;
+};
+
+
+void searchName(char findName[], struct student b1[], int length){
+	int found = 0;
+	for(int i=0; i<length; i++){
+		if ( strcmp(findName,b1[i].name) == 0 ) {
+			printf("Name: %s\n",b1[i].name);
+			printf("Grade: %d\n",b1[i].grade);
+			found =1;
+		}
+
+	}
+
+	if(found==0){
+		printf("%s Not in the records\n",findName);
+	}
+
+}
+
+void filterOut(int filter, int option , struct student b1[], int length){
+	for(int i=0; i<length; i++){
+
+		if (option == 1 && b1[i].grade > filter){
+			printf("Name: %s\n",b1[i].name);
+			printf("Grade: %d\n",b1[i].grade);
+
+		}
+		else if (option == 2 && b1[i].grade < filter){
+			printf("Name: %s\n",b1[i].name);
+			printf("Grade: %d\n",b1[i].grade);
+
+		}
+
+	}
+
+}
+
+
+int main(){
+
+	struct student b1[10] = {
+        	{"Alice", 85},
+        	{"Bob", 90},
+        	{"Charlie", 78},
+        	{"Diana", 92},
+        	{"Ethan", 88},
+        	{"Fiona", 75},
+        	{"George", 80},
+        	{"Hannah", 95},
+        	{"Ian", 70},
+        	{"Jenny", 89}
+    	};
+	int length = 10;
+
+    	// Example: Print all student names and grades
+    	for (int i = 0; i < 10; i++) {
+        	printf("Name: %s,\tGrade: %d\n", b1[i].name, b1[i].grade);
+    	}
+
+	//Filter
+	int choice;
+	printf("Filter Data: \n1. Name \n2. >  \n3. < \n4. exit \n");
+	scanf("%d", &choice);
+
+	char findName[20];
+	int filter;
+	int Greater = 1; // >
+	int Smaller = 2; // <
+
+
+
+	switch (choice)
+        {
+            case 1:
+		printf("Enter Name: ");
+		scanf("%s",findName);
+                searchName(findName, b1, length);
+                break;
+
+            case 2:
+		printf("Grades Greater than ");
+		scanf("%d",&filter);
+                filterOut(filter, Greater, b1, length);
+                break;
+
+            case 3:
+		printf("Grades Smaller than ");
+		scanf("%d",&filter);
+                filterOut(filter, Smaller, b1, length);
+                break;
+
+                
+            case 4:
+                    exit(0);
+                
+            default:
+                printf("\nInvalid choice!!");
+		break;
+        }
+
+	return 0;
+
+}

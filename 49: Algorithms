@@ -1,1 +1,118 @@
+How to read a file?
+1. Open the file for reading
+FILE *fptr = fopen("file.txt", "r"); 
+
+
+2. Read the data
+You can use different functions which are included in the stdio.h library.
+1. fgetc() - gets an individual character from the data and moves on to the next character
+until it reaches EOF. You can use a while loop , while ((ch = fgetc(fptr)) != EOF)
+
+2. fgets() - it reads one string up to given number of characters at a time and stores it in 
+the given string buffer. It returns the string if it is successfully read or returns NULL if failed.
+1. create a string holder, char buffer[50];
+2. use a while (fgets(buff, 50, fptr)) {
+
+3. fscanf() - reads the input in the form of formatted string. It can read, ignore, modify the 
+type of data using scanset characters.
+Raman  12
+Kunal  25
+Vikas   6
+ex:   while (fscanf(fptr, "%s %d", name, &age) == 2) {
+
+4. fread()
+
+Useful: Reading a file using fread() is suitable for binary files or when you need to 
+manipulate the entire file content at once, such as image files or raw data files.
+
+
+3. Close the file
+fclose(fptr);
+
+
 Mini project — Read a file of numbers, sort them, and filter results using command-line input.
+Used some of the previous project:
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+
+void filterOut(int filter, int option , int *ptr, int length){
+	for(int i=0; i<length; i++){
+
+		if (option == 1 && *(ptr+i) > filter){
+			printf("%d\n",*(ptr+i));
+
+		}
+		else if (option == 2 && *(ptr+i) < filter){
+			printf("%d\n",*(ptr+i));
+
+
+		}
+
+	}
+
+}
+
+
+int main(){
+	FILE *fptr;
+	fptr = fopen("file.txt", "r");
+
+	int num;
+	int *ptr;
+	int amount = 0;// to get amount of numbers in the file
+
+	if(fptr != NULL){
+		while (fscanf(fptr, "%d", &num) == 1) {
+			amount++; // gets the amount of numbers
+		}
+		//important
+		rewind(fptr); // 🔄 Reset file pointer
+	}
+
+	ptr = (int*)malloc(amount*sizeof(int)); //create dynamic array to store the numbers in the file, don't actually need it
+	if(ptr == NULL){
+      		printf("Error! memory not allocated.");
+      		exit(0);
+	}
+
+  //previous code
+	int choice;
+	printf("Filter Data:\n1. >  \n2. < \n3. exit \n");
+	scanf("%d", &choice);
+	int filter;
+	int Greater = 1; // >
+	int Smaller = 2; // <
+
+	switch (choice)
+        {
+
+            case 1:
+		printf("Grades Greater than ");
+		scanf("%d",&filter);
+                filterOut(filter, Greater, ptr, amount);
+                break;
+
+            case 2:
+		printf("Grades Smaller than ");
+		scanf("%d",&filter);
+                filterOut(filter, Smaller, ptr, amount);
+                break;
+
+                
+            case 3:
+                    exit(0);
+                
+            default:
+                printf("\nInvalid choice!!");
+		            break;
+        }
+
+
+	fclose(fptr);
+  free(ptr);
+
+	return 0;
+}

@@ -25,12 +25,22 @@ int main() {
 }
 
 How programs are executed in C?
-Normally code will run only run one instruction at a time.
-So line by line.
+Normally code will run only one instruction at a time. So line by line.
 Some computers have multiple cores so they can run multiple code simultaneously.
-However 
-Concurrency
-B
+However some programs can make use of concurrency. They run multiple functions at the same
+time. Each line is run in turn from the different functions.
 
+Concurrent Programming?
+Allows a program to perform several tasks simultaneously instead of having to wait for the result of 
+one operation to move onto the next. The operating system itself uses this concept to meet its users expectations. 
+If we had to wait for a song to finish to be able to open our browser, or if we had to restart the computer to 
+kill a program caught in an infinite loop, we’d die of frustration!
 
-processes vs threads.
+Processes vs Threads.
+A process is a program in execution. A single program can create many processes when run multiple times; 
+for example, when we open a .exe or binary file multiple times, multiple instances begin (multiple processes are created).
+
+A thread is a logical sequence of instructions inside a process that is automatically managed by the operating system’s kernel. 
+A regular sequential program has a single thread, but modern operating systems allow us to create several threads in our programs, 
+all of which run in parallel.
+

@@ -1,0 +1,115 @@
+Learn  (https://www.geeksforgeeks.org/c/thread-functions-in-c-c/)
+
+pthread_create()
+Creates a new thread and starts execution. Takes a function pointer that will 
+be executed in the new thread.
+Syntax: pthread_create(thread, attr, routine, arg);
+
+thread : Pointer to a pthread_t variable
+attr : Use NULL
+routine: Pointer to the function that the thread will execute. 
+It must return void* and accept a void* argument.
+arg: A single argument passed to the thread function. Use NULL if no argument is needed. 
+We can pass a struct or pointer to pass multiple values.
+
+Example:
+#include <pthread.h>
+#include <stdio.h>
+
+void* foo(void* arg) {
+    printf("Thread created");
+    return NULL;
+}
+
+int main() {
+    pthread_t thread1;
+    pthread_create(&thread1, NULL, foo, NULL);
+
+    pthread_join(thread1, NULL);
+    return 0;
+}
+
+
+pthread_join()
+Waits for the specified thread to terminate. It blocks the calling thread until the target thread finishes.
+Syntax: pthread_join(thread, retval);
+
+thread: The ID of the thread you want to wait for. This is the thread that will be joined.
+retval: A pointer to a location where the exit status of the thread will be stored. 
+This is optional and can be set to NULL if you do not need the return value of the thread.
+
+Example:
+#include <pthread.h>
+#include <stdio.h>
+
+void* foo(void* arg) {
+    printf("%s\n", (char*)arg);
+    return NULL;
+}
+
+int main() {
+    pthread_t thread1, thread2;
+    pthread_create( &thread1, NULL, foo, 
+	(void*)"Thread1 is running." );
+
+    pthread_create( &thread2, NULL, foo, 
+	(void*)"Thread2 is running." );
+
+    // Wait for thread 1 to finish
+    pthread_join(thread1, NULL);
+
+    // Wait for thread 2 to finish
+    pthread_join(thread2, NULL);
+
+
+    printf("Both threads end.");
+
+    return 0;
+}
+
+
+pthread_exit()
+Terminates the calling thread. This does not affect other threads.
+Syntax: pthread_exit(retval);
+retval: A pointer to the value that will be returned to any thread that calls 
+pthread_join on this thread. This can be NULL if no value is to be returned.
+
+Example:
+
+#include <pthread.h>
+#include <stdio.h>
+
+void* foo(void* arg) {
+    printf("Thread is running.\n");
+    
+    // Explicity terminate the thread
+    pthread_exit(NULL);
+    
+    printf("This will not be executed\n");
+    
+    return NULL;
+}
+
+int main() {
+    pthread_t thread;
+    pthread_create(&thread, NULL, foo, NULL);
+    pthread_join(thread, NULL);
+    return 0;
+}
+
+
+
+
+Thread lifecycle
+Understanding the thread lifecycle is crucial for designing and debugging multithreaded applications. 
+The different states
+1. New: THe thread has been created but not yet started
+2. Runnable: The thread is ready to run and is waiting for the CPU tiem to execute
+3. Running: The thread is currently executing instructions
+4. Blocked/Waiting: 
+5. Terminated: The thread has completed its execution or has been stopped
+
+Simple Example
+
+
+Complex Example

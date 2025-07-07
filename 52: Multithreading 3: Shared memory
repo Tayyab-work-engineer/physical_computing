@@ -1,0 +1,16 @@
+Shared memory and race conditions — explain and demonstrate.
+
+When multiple threads are run, they share the same memory space.
+	pthread_t thread1,thread2;
+
+	pthread_create(&thread1, NULL, foo, (void*)"Thread1 is running");
+	pthread_create(&thread1, NULL, foo, (void*)"Thread2 is running");
+
+They can introduce challenges such as race conditions, when multiple threads access
+and modify the same data simultaneously.
+
+
+
+
+
+

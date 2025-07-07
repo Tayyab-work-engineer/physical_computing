@@ -24,6 +24,32 @@ int main() {
     return 0;
 }
 
+https://www.youtube.com/watch?v=ldJ8WGZVXZk
+Example:Introduction To Threads (pthreads) | C Programming Tutorial
+
+multi threaded program
+
+int x;
+                int a;
+                a=3;
+
+x = 20;
+int y=50;
+                int b;
+
+y = 50;
+
+                b=5;
+                int product;
+int sum;
+sum = x+y;
+                product = a*b;
+
+concurrent but not parallel execution
+
+
+
+
 How programs are executed in C?
 Normally code will run only one instruction at a time. So line by line.
 Some computers have multiple cores so they can run multiple code simultaneously.

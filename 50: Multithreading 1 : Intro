@@ -1,33 +1,15 @@
 Introduction To multithreading
 
-How to create threads?
-1. add pthread library ( #include <pthread.h> )
-2. create the variable name to store the thread, ( pthread_t thread; )
-3. link it to a function ( pthread_create(&thread, NULL, wait, NULL); )
-4. join the thread ( pthread_join(thread, NULL); )
-
-
-Example code:
-#include <pthread.h>
-#include <stdio.h>
-
-void* foo(void* arg) {
-    printf("Thread created");
-    return NULL;
-}
-
-int main() {
-    pthread_t thread1;
-    pthread_create(&thread1, NULL, foo, NULL);
-
-    pthread_join(thread1, NULL);
-    return 0;
-}
+How programs are executed in C?
+Normally code will run one instruction at a time. So line by line.
+Some computers have multiple cores so they can run multiple code simultaneously.
+However some programs can make use of concurrency. They run multiple functions at the same
+time. Each line is run in turn from the different functions.
 
 https://www.youtube.com/watch?v=ldJ8WGZVXZk
 Example:Introduction To Threads (pthreads) | C Programming Tutorial
 
-multi threaded program
+multi threaded program, the CPU is switching.
 
 int x;
                 int a;
@@ -47,20 +29,134 @@ sum = x+y;
 
 concurrent but not parallel execution
 
-
-
-
-How programs are executed in C?
-Normally code will run only one instruction at a time. So line by line.
-Some computers have multiple cores so they can run multiple code simultaneously.
-However some programs can make use of concurrency. They run multiple functions at the same
-time. Each line is run in turn from the different functions.
-
 Concurrent Programming?
 Allows a program to perform several tasks simultaneously instead of having to wait for the result of 
 one operation to move onto the next. The operating system itself uses this concept to meet its users expectations. 
 If we had to wait for a song to finish to be able to open our browser, or if we had to restart the computer to 
 kill a program caught in an infinite loop, we’d die of frustration!
+
+How to create threads?
+1. add pthread library ( #include <pthread.h> )
+2. create the variable name to store the thread, ( pthread_t thread; )
+3. link it to a function ( pthread_create(&thread, NULL, wait, NULL); )
+4. join the thread ( pthread_join(thread, NULL); )
+
+
+Example code:
+#include <stdio.h>
+#include <pthread.h>
+
+void *computation(void* add);
+
+int main()
+{
+    pthread_t thread1;
+    pthread_t thread2;
+    long value1 = 1;
+    long value2 = 2;
+    pthread_create(&thread1, NULL, computation, (void*)&value1);
+    pthread_create(&thread2, NULL, computation, (void*)&value2);
+    pthread_join(thread1, NULL);
+    pthread_join(thread2, NULL);
+    return 0;
+}
+
+void *computation(void* add)
+{
+    long *add_num;              //create pointer
+    add_num = (long *) (add);  //assign address by typecasting
+    printf("%ld\n", *add_num);
+
+
+    return NULL;
+}
+
+Performance Test and why you should use multithreads:
+Without threads:
+#include <stdio.h>
+#include <pthread.h>
+
+void *computation(void* add);
+
+int main()
+{
+    pthread_t thread1;
+    pthread_t thread2;
+    long value1 = 1;
+    long value2 = 2;
+
+    computation( (void*) &value1 );
+    computation( (void*) &value2 );
+
+    return 0;
+}
+
+void *computation(void* add)
+{
+    long sum = 0;
+    long *add_num;              //create pointer
+    add_num = (long *) (add);  //assign address by typecasting
+
+    for (long i = 0; i<1000000000; i++)
+    {
+        sum += *add_num;
+    }
+
+
+    return NULL;
+}
+$ time ./thread1
+
+real    0m8.663s
+user    0m0.046s
+sys     0m0.015s
+
+
+With threads:
+#include <stdio.h>
+#include <pthread.h>
+
+void *computation(void* add);
+
+int main()
+{
+    pthread_t thread1;
+    pthread_t thread2;
+    long value1 = 1;
+    long value2 = 2;
+    
+    pthread_create(&thread1, NULL, computation, (void*)&value1);
+    pthread_create(&thread2, NULL, computation, (void*)&value2);
+    pthread_join(thread1, NULL);
+    pthread_join(thread2, NULL);
+
+    return 0;
+}
+
+void *computation(void* add)
+{
+    long sum = 0;
+    long *add_num;              //create pointer
+    add_num = (long *) (add);  //assign address by typecasting
+
+    for (long i = 0; i<1000000000; i++)
+    {
+        sum += *add_num;
+    }
+
+
+    return NULL;
+}
+
+
+
+$ time ./thread1
+
+real    0m3.863s
+user    0m0.046s
+sys     0m0.000s
+
+
 
 Processes vs Threads.
 A process is a program in execution. A single program can create many processes when run multiple times; 

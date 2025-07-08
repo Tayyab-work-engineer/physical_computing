@@ -24,7 +24,8 @@ events to function correctly.
 A race condition typically occurs when multiple threads access a shared variable(
 or state) at the same time.
 
-Code that that a race condition
+
+Code with a race condition
 code.c
 #include <pthread.h>
 #include <stdio.h>
@@ -86,12 +87,12 @@ int balance = 0;
 int read_balance()
 {
 	usleep(250000);
-	return balance;
+	return balance; 
 }
 
 void write_balance(int new_balance){
 	usleep(250000);
-	balance = new_balance;
+	balance = new_balance; // sets new amount to balance.
 }
 
 output?

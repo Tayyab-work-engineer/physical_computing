@@ -36,6 +36,15 @@ pthread_mutex_destroy(&mutex);
 
 
 Condition Variables:
+What is condition variable?
+
+
+
+How to make use of it?
+
+
+
+Example:
 https://www.youtube.com/watch?v=0sVGnxg6Z3k
 
 Sometimes mutex are not enough. 
@@ -110,10 +119,130 @@ Waiting...
 
 This is due to the car function which keeps hold of the lock mutex.
 We can use condition variables to get through this problem.
+There are 3 functions you can do with condition variables
+1. wait
+2. broadcast
+3. signal
+
+Updated code
+pthread_mutex_t mutexFuel;
+pthread_cond_t condFuel;
+
+int fuel = 0;
+
+void* fuel_filling(void *arg){
+	printf("Filling Fuel\n");
+
+	for (int i = 0; i<5;i++)
+	{
+		pthread_mutex_lock(&mutexFuel);
+		printf("Fill Fuel = %d\n",fuel);
+		fuel += 15;
+
+		pthread_mutex_unlock(&mutexFuel);
+		pthread_cond_signal(&condFuel);
+		sleep(1);
+	}
+
+}
+
+void* car(void* arg){
+	printf("Here to get fuel\n");
+	pthread_mutex_lock(&mutexFuel);
+	while(fuel < 40){
+		printf("Waiting for fuel...\n");
+		pthread_cond_wait(&condFuel, &mutexFuel);
+		//Equivalent to:
+		//does this line pthread_mutex_unlock(&mutexFuel);
+		//which allows other thread to run, because it can get the lock
+		//wait for signal on condFuel which is called from other thread
+		//pthread_mutex_lock(&mutexFuel) call this line to get the lock again
+	}
+	fuel -= 40;
+	printf("Got fuel: %d\n");
+
+	pthread_mutex_unlock(&mutexFuel);
+}
+
+
+extra video
+What if you have many threads? Such as 4 cars?
+https://www.youtube.com/watch?v=RtTlIvnBw10
+
+
+Use pthread_cond_broadcast(&condFuel); //message how much cars waiting
+
+
+Full code
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 
 
+pthread_mutex_t mutexFuel;
+pthread_cond_t condFuel;
+
+int fuel = 0;
+
+void* fuel_filling(void *arg){
+	printf("Filling Fuel\n");
+
+	for (int i = 0; i<5;i++)
+	{
+		pthread_mutex_lock(&mutexFuel);
+		fuel += 60;
+		printf("Fill Fuel = %d\n",fuel);
 
 
+		pthread_mutex_unlock(&mutexFuel);
+		pthread_cond_broadcast(&condFuel); //message how much cars waiting
+		sleep(1);
+	}
+
+}
+
+void* car(void* arg){
+	printf("Here to get fuel\n");
+	pthread_mutex_lock(&mutexFuel);
+	while(fuel < 40){
+		printf("Waiting for fuel...\n");
+		pthread_cond_wait(&condFuel, &mutexFuel);
+		//Equivalent to:
+		//does this line pthread_mutex_unlock(&mutexFuel);
+		//which allows other thread to run, because it can get the lock
+		//wait for signal on condFuel which is called from other thread
+		//pthread_mutex_lock(&mutexFuel) call this line to get the lock again
+	}
+	fuel -= 40;
+	printf("Got fuel: %d\n", fuel);
+
+	pthread_mutex_unlock(&mutexFuel);
+}
+
+int main(){
+	pthread_t th[5];
+
+	pthread_mutex_init(&mutexFuel, NULL);
+	pthread_cond_init(&condFuel, NULL);
+
+	for(int i=0; i<4; i++){
+		pthread_create(&th[i], NULL, &car, NULL);
+	}
+
+	pthread_create(&th[4], NULL, &fuel_filling, NULL);
+
+	for(int i = 0; i<5; i++){ 
+		pthread_join(th[i],NULL);
+	}
+
+	pthread_mutex_destroy(&mutexFuel);
+	pthread_cond_destroy(&condFuel);
+
+
+	return 0;
+
+}
 
 

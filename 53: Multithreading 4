@@ -1,1 +1,43 @@
 Synchronization with mutexes (pthread_mutex_t) and conditional variables.
+
+Mutex:
+https://www.youtube.com/watch?v=raLCgPK-Igc
+
+Mutex is a synthronisation primitive that enforces limits on access to a shared
+resource when we have multiple threads of execution.
+
+Mutex is like a key to a lock. If someone grabs the key and unlocks it and then 
+goes inside and locks it. No one can come in. They have to wait until the first person
+unlocks and then locks it and then puts the key in its place.
+
+How to use:
+1. you need to create the mutex outside main
+pthread_mutex_t mutex;
+
+2. Inside main write
+pthread_mutex_init(&mutex, NULL);
+
+3.Now you can use the mutex in your function
+void* deposit(void *amount){
+
+	pthread_mutex_lock(&mutex);
+
+	int account_balance = read_balance();
+	account_balance += *( (int*) amount);
+	write_balance(account_balance);
+	
+	pthread_mutex_unlock(&mutex);
+
+}
+
+
+4. Inside the main function you need to destroy it after you finish using it.
+pthread_mutex_destroy(&mutex);
+
+
+Condition Variables:
+https://www.youtube.com/watch?v=0sVGnxg6Z3k
+
+
+
+

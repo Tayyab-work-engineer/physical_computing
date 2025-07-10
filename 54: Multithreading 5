@@ -91,8 +91,43 @@ Returning thread
 
 Semaphores:
 Binary Semaphore: This is also known as a mutex lock. It can have only two values - 0 and 1. Its value is initialized to 1. 
-It is used to implement the solution of critical section problems with multiple processes and a single resource.
+There are multiple processes and a single resource. When a process wants to access a critical section (resource), it checks if the s
+value is 0 using the wait function. If it is not zero then it will make it zero and it can access the critical section. Once it finishes with the
+critical section then the s value will be increased using the function signal. 
+All the processes have to wait if the s value is zero.
+
 
 Counting Semaphore: Counting semaphores can be used to control access to a given resource consisting of a finite number of instances. 
 The semaphore is initialized to the number of resources available. Its value can range over an unrestricted domain.
+The only difference is that the s value is not limited to 1. If the value is 2 then 2 processes will be able to access the resource and
+the third process will have to wait because the s value is 0.
+
+Ex: producer and consumer problem
+Customer takes item from the shelf
+producer puts items into the shelf
+
+Customer cannot take item if there are not items on the shelf
+Consumer must not put anymore items if the shelf is full.
+
+If there are items in the shelf then customer will get the lock and take item from the shelf then will release the lock.
+If there are no items in the shelf then producer will get the lock and insert an item to the shelf and then release the lock.
+
+Ex:
+
+
+
+
+
+
+
+
+
+
+
+
+Adv:
+
+Disadv:
+1. need to keep track of calls of wait and signal. Need to be done in correct order or there can be a deadlock
+2. priority inversion taking place
 

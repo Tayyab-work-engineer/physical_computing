@@ -1,8 +1,98 @@
 Explore thread-safe programming techniques.
 
+What is thread safety?
+Multri threads can access the same resources and they need to be careful so that they are aware 
+when one thread makes the change, the other thread knows of it and then proceeds after. 
+
 Locks
+You can use locks to lock a piece of memory so that other threads can't access it until you are done,
+writing to it. They are blocked and are waiting for the thread to finish and it gets unlocked.
+
+Adv:
+
+Dis adv:
+Real time systems avoid the use of locks because a thread could block a critical thread(like thrusters for a jet).
+The resulting behaviour of the system could be disastrous. 
 
 Condition Variables
+When one thread is running and it has the lock, then another thread is blocked because it doesn't have the lock,
+thread 1 can use pthread_cond_wait(), to be one hold and release the parameters inside such as lock until the 
+pthread_cond_signal() is called. Which will start thread 1 again.
+
+The pthread_cond_wait() release a lock specified by mutex and wait on condition cond variable. 
+The pthread_cond_signal() wake up threads waiting for the condition variable. 
+
+Ex:
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+pthread_mutex_t mutex;
+pthread_cond_t cond;
+
+int done = 1;
+
+void* foo(){
+	pthread_mutex_lock(&mutex);
+	if (done==1){
+		done = 2;
+		printf("Waiting on condition variable cond1\n");
+		pthread_cond_wait(&cond,&mutex); //thread1 will pause here and release the lock
+		//until thread2 comes and done the signal
+		printf("thread1\n");
 
 
-Semaphores
+	}
+	else{
+		printf("Signaling condition variable cond1\n");
+		pthread_cond_signal(&cond);//signal and will cause thread 1 to start after it gives up the lock
+		printf("thread 2\n");
+
+	}
+	pthread_mutex_unlock(&mutex);
+	printf("Returning thread\n");
+
+	return NULL;
+
+}
+
+
+int main(){
+	pthread_t th[2];
+
+	pthread_mutex_init(&mutex, NULL);
+	pthread_cond_init(&cond, NULL);
+
+	pthread_create(&th[0], NULL, &foo, NULL);
+	sleep(1);
+
+	pthread_create(&th[1], NULL, &foo, NULL);
+
+	for(int i = 0; i<2; i++){ 
+		pthread_join(th[i],NULL);
+	}
+
+	pthread_mutex_destroy(&mutex);
+	pthread_cond_destroy(&cond);
+
+
+	return 0;
+
+}
+
+Output:
+Waiting on condition variable cond1
+Signaling condition variable cond1
+thread 2
+Returning thread
+thread1
+Returning thread
+
+Semaphores:
+Binary Semaphore: This is also known as a mutex lock. It can have only two values - 0 and 1. Its value is initialized to 1. 
+It is used to implement the solution of critical section problems with multiple processes and a single resource.
+
+Counting Semaphore: Counting semaphores can be used to control access to a given resource consisting of a finite number of instances. 
+The semaphore is initialized to the number of resources available. Its value can range over an unrestricted domain.
+

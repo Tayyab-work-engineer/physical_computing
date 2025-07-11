@@ -102,6 +102,21 @@ The semaphore is initialized to the number of resources available. Its value can
 The only difference is that the s value is not limited to 1. If the value is 2 then 2 processes will be able to access the resource and
 the third process will have to wait because the s value is 0.
 
+Syntax:
+sem_t sem;//create semaphore
+
+// Initialize the semaphore (pshared = 0 means shared between threads)
+sem_init(&sem, 0, initial_value);
+
+// Wait (decrement semaphore)
+sem_wait(&sem);
+
+// Signal (increment semaphore)
+sem_post(&sem);
+
+// Destroy the semaphore
+sem_destroy(&sem);
+
 Ex: producer and consumer problem
 Customer takes item from the shelf
 producer puts items into the shelf
@@ -112,9 +127,96 @@ Consumer must not put anymore items if the shelf is full.
 If there are items in the shelf then customer will get the lock and take item from the shelf then will release the lock.
 If there are no items in the shelf then producer will get the lock and insert an item to the shelf and then release the lock.
 
-Ex:
+Ex:https://www.youtube.com/watch?v=l6zkaJFjUbM
+
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <semaphore.h>
+#include <time.h>
 
 
+
+pthread_mutex_t mutex;
+sem_t empty; //number of empty slots
+sem_t full; // number of full slots
+
+int shelf[10];
+int food = 0;
+
+void* producer(){
+	while(1){
+		//produce
+		int x = rand() % 100;
+
+		sem_wait(&empty);//check if empty is 0, if its 0 then it will be stuck and have to wait
+		pthread_mutex_lock(&mutex);
+			
+		//add to the shelf
+
+		shelf[food] = x;
+		food++;
+
+		pthread_mutex_unlock(&mutex);
+		sem_post(&full); //increase the full. because element has been added to the buffer
+
+		usleep(100000); // Sleep for 100ms to avoid CPU hogging
+
+	}
+    return NULL;
+
+}
+
+void* consumer(){
+	while(1){
+		sem_wait(&full); // check if there are items in the buffer or else if full is 0, this means it has to wait.
+		pthread_mutex_lock(&mutex);
+		
+		// remove the food from the shelf
+		//our shelf is like a stack, filo
+
+		int y = shelf[food-1];
+		food--;
+
+
+		//Consume
+		printf("Got %d\n", y);
+
+		pthread_mutex_unlock(&mutex);
+		sem_post(&empty); // increase value of empty because consumer took from the buffer.
+	    usleep(150000); // Sleep to simulate consumption time
+
+	}
+    return NULL;
+
+}
+
+int main(){
+	srand(time(NULL));
+	sem_init(&empty, 0, 10);//we have 10 slots, and no elements in the beginning so 10 empty slots
+	sem_init(&full, 0, 0); // we have 10 slots, and no elements and so we have 0 as inital value
+
+	pthread_t th[2];
+
+	pthread_mutex_init(&mutex, NULL);
+
+	pthread_create(&th[0], NULL, &consumer, NULL);
+	sleep(1);
+
+	pthread_create(&th[1], NULL, &producer, NULL);
+
+	for(int i = 0; i<2; i++){ 
+		pthread_join(th[i],NULL);
+	}
+
+	pthread_mutex_destroy(&mutex);
+	sem_destroy(&full);
+	sem_destroy(&empty);
+
+	return 0;
+
+}
 
 
 

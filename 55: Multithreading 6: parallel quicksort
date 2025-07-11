@@ -1,0 +1,321 @@
+Use threads in a sorting algorithm (e.g., parallelize quicksort).
+
+Lets first recap the sorting algorithms:
+Quicksort:
+What is quick sort?
+1. Uses a pivot
+2. One side of the pivot places the values that are less than the pivot and the other
+side are values greater than pivot. So two sub arrays.
+3. The sub arrays are then sorted recursively.
+4. This process continues until the entire array is sorted.
+
+Ex: 4, 2, 5, 3, 1
+
+The low value [0] is 4 and the high value [length - 1] is `
+You select the high value as the pivot.
+
+
+Step 1:
+Select the pivot
+ 4, 2, 5, 3, [1]
+
+Step 2:
+             [1] 4 2 5 3
+
+Step 3,Call the function again which selects the next pivots for the two arrays:
+One for the 0 to pivot-1 and the other for pivot+1 to high
+[1] 4 2 5 [3]
+
+Step 4: Sort the arrays
+[1] 2 [3]  4 5
+
+Code example:
+#include <stdio.h>
+
+// Function to swap two elements
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int partition(int arr[], int low, int high){
+	//step 1: select the pivot
+	int pivot = arr[high];//select first element as pivot
+
+	int i = low-1; //i=-1
+	// Step 2: Rearrange elements around pivot
+
+	for (int j=low; j<high; j++){
+		if (arr[j]<pivot){ // 10<7, NO, 8<7, NO, 2<7, YES, so i=0
+			i++;
+			swap(&arr[i], &arr[j]);//10,2, 
+			//after the swap
+			//2, 8, 10, 5, 7
+			//next swap
+			//2, 5, 10, 8, 7
+		}
+	}
+	// Place pivot in correct position
+    swap(&arr[i + 1], &arr[high]); // i is 2 so i+1 = 3, and high = 7
+	//	2, 5, 7, 8, 10
+
+
+	return i+1; //return pivot index ( 2 )
+
+}
+
+void quicksort(int arr[], int low, int high){
+	if (low<high){
+
+		//get new pivot
+		int pivot = partition(arr, low, high);  
+		//pivot is index 2
+
+		quicksort(arr, low, pivot-1);
+		quicksort(arr, pivot+1, high);
+
+
+	}
+
+}
+
+int main(){
+	int arr[] = {10, 8, 2, 5, 7};
+
+	int n = sizeof(arr) / sizeof(arr[0]);
+
+	quicksort(arr, 0, n-1);
+
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+
+	return 0;
+}
+
+Using threads:
+Parallel Quicksort
+Full code:
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+// Swap function
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Partition function
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+
+    swap(&arr[i + 1], &arr[high]);
+    return i + 1;
+}
+
+// Struct to pass multiple arguments to thread
+typedef struct {
+    int* arr;
+    int low;
+    int high;
+} QuickSortArgs;
+
+// Thread function for quicksort
+void* threaded_quicksort(void* arg) {
+    QuickSortArgs* args = (QuickSortArgs*)arg;
+    int low = args->low;
+    int high = args->high;
+    int* arr = args->arr;
+
+    if (low < high) {
+        int pivot = partition(arr, low, high);
+
+        // Create thread arguments for left and right parts
+        QuickSortArgs* leftArgs = malloc(sizeof(QuickSortArgs));
+        leftArgs->arr = arr;
+        leftArgs->low = low;
+        leftArgs->high = pivot - 1;
+
+        QuickSortArgs* rightArgs = malloc(sizeof(QuickSortArgs));
+        rightArgs->arr = arr;
+        rightArgs->low = pivot + 1;
+        rightArgs->high = high;
+
+        // Create threads
+        pthread_t leftThread, rightThread;
+        pthread_create(&leftThread, NULL, threaded_quicksort, leftArgs);
+        pthread_create(&rightThread, NULL, threaded_quicksort, rightArgs);
+
+        // Wait for both threads to finish
+        pthread_join(leftThread, NULL);
+        pthread_join(rightThread, NULL);
+
+        // Free memory
+        free(leftArgs);
+        free(rightArgs);
+    }
+
+    return NULL;
+}
+
+int main() {
+    int arr[] = {10, 8, 2, 5, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    QuickSortArgs* args = malloc(sizeof(QuickSortArgs));
+    args->arr = arr;
+    args->low = 0;
+    args->high = n - 1;
+
+    pthread_t mainThread;
+    pthread_create(&mainThread, NULL, threaded_quicksort, args);
+    pthread_join(mainThread, NULL);
+
+    // Print sorted array
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+
+    printf("\n");
+    free(args);
+    return 0;
+}
+
+
+Steps:
+// Struct to pass multiple arguments to thread
+typedef struct { // threads only allow one argument to pass
+    int* arr;
+    int low;
+    int high;
+} QuickSortArgs;
+
+int main() {
+    int arr[] = {10, 8, 2, 5, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    QuickSortArgs* args = malloc(sizeof(QuickSortArgs));
+    args->arr = arr;
+    args->low = 0;
+    args->high = n - 1;
+
+    pthread_t mainThread;
+    pthread_create(&mainThread, NULL, threaded_quicksort, args);
+    pthread_join(mainThread, NULL);
+
+    // Print sorted array
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+
+    printf("\n");
+    free(args);
+    return 0;
+}
+
+Next step:
+// Struct to pass multiple arguments to thread
+typedef struct { // threads only allow one argument to pass
+    int* arr;
+    int low;
+    int high;
+} QuickSortArgs;
+
+
+// Thread function for quicksort
+void* threaded_quicksort(void* arg) {
+    QuickSortArgs* args = (QuickSortArgs*)arg;
+    int low = args->low;
+    int high = args->high;
+    int* arr = args->arr;
+
+    if (low < high) {
+        int pivot = partition(arr, low, high);
+
+        // Create thread arguments for left and right parts
+        QuickSortArgs* leftArgs = malloc(sizeof(QuickSortArgs));
+        leftArgs->arr = arr;
+        leftArgs->low = low;
+        leftArgs->high = pivot - 1;
+
+        QuickSortArgs* rightArgs = malloc(sizeof(QuickSortArgs));
+        rightArgs->arr = arr;
+        rightArgs->low = pivot + 1;
+        rightArgs->high = high;
+
+        // Create threads
+        pthread_t leftThread, rightThread;
+        pthread_create(&leftThread, NULL, threaded_quicksort, leftArgs);
+        pthread_create(&rightThread, NULL, threaded_quicksort, rightArgs);
+
+        // Wait for both threads to finish
+        pthread_join(leftThread, NULL);
+        pthread_join(rightThread, NULL);
+
+        // Free memory
+        free(leftArgs);
+        free(rightArgs);
+    }
+
+    return NULL;
+}
+
+
+int main() {
+    int arr[] = {10, 8, 2, 5, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    QuickSortArgs* args = malloc(sizeof(QuickSortArgs));
+    args->arr = arr;
+    args->low = 0;
+    args->high = n - 1;
+
+    pthread_t mainThread;
+    pthread_create(&mainThread, NULL, threaded_quicksort, args);
+    pthread_join(mainThread, NULL);
+
+    // Print sorted array
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+
+    printf("\n");
+    free(args);
+    return 0;
+}
+
+Final step:
+
+// Swap function
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Partition function
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+
+    swap(&arr[i + 1], &arr[high]);
+    return i + 1;
+}
+
+
+

@@ -1,0 +1,99 @@
+Mini project — Build a multithreaded program that reads and processes files concurrently.
+
+Process multiple files in parallal
+
+#include <stdio.h>
+#include <pthread.h>
+
+void* read_file(void* filename) {
+    char* fname = (char*)filename;
+    FILE* file = fopen(fname, "r");
+    char line[256];
+
+    if (!file) {
+        perror("Failed to open file");
+        return NULL;
+    }
+
+    printf("Reading from %s:\n", fname);
+    while (fgets(line, sizeof(line), file)) {
+        printf("%s: %s", fname, line);
+    }
+
+    fclose(file);
+    return NULL;
+}
+
+int main() {
+    pthread_t t1, t2;
+
+    pthread_create(&t1, NULL, read_file, "file1.txt");
+    pthread_create(&t2, NULL, read_file, "file2.txt");
+
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+
+    return 0;
+}
+
+
+Mini Project:
+This loop:
+Reads a character (  while ((ch = fgetc(file)) != EOF) )
+
+If it’s a letter, go back one step  
+
+if (isalpha(ch)) {
+            pos = ftell(file); // Get current position
+            fseek(file, pos - 1, SEEK_SET); // Go back one char   )
+
+Overwrite it with its uppercase version  (  fputc(toupper(ch), file); // Write uppercase char   )
+
+Return to the forward reading position   (  fseek(file, pos, SEEK_SET); // Return to original position  ) 
+
+Repeat until end of file
+
+
+
+#include <stdio.h>
+#include <pthread.h>
+#include <ctype.h>
+
+
+void* uppercase_file(void* arg){
+    char* fname = (char*)arg;
+    FILE* file = fopen(fname,"r+");
+
+    if(!file){
+        printf("unable to open");
+        return NULL;
+    }
+
+    char ch;
+    long pos;
+
+    while ((ch = fgetc(file)) != EOF) {
+        if (isalpha(ch)) {
+            pos = ftell(file); // Get current position
+            fseek(file, pos - 1, SEEK_SET); // Go back one char
+            fputc(toupper(ch), file); // Write uppercase char
+            fseek(file, pos, SEEK_SET); // Return to original position
+        }
+    }
+
+    fclose(file);
+    printf("Finished processing %s\n", fname);
+    return NULL;
+}
+
+int main(){
+    pthread_t t1, t2;
+
+    pthread_create(&t1, NULL, uppercase_file, "file1.txt");
+    pthread_create(&t2, NULL, uppercase_file, "file2.txt");
+
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+
+    return 0;
+}

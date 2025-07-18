@@ -1,1 +1,30 @@
 Learn what Protocol Buffers are and why they’re used in embedded systems.
+
+What is Protocol buffers?
+turn your code into binary which saves space.
+Is a method for serializing structured data. 
+Ex:
+Lets say your temperature sensor is connected to your arduino. You want to send its data
+to another system such as mobile app, a web server, a PC dashboard or another microcontroller 
+over UART,SPI, Bluetooth?
+You want to send this data:
+Temperature = 25.6
+Unit = "C"
+Timestamp = 1721318400
+
+Why Send This Data?You might want to:
+1. Log it to an SD card or cloud
+2. Display it on a dashboard
+3. Trigger alarms or decisions (e.g. temperature too high)
+4. Share with other devices in a smart home or IoT network
+
+But before sending it, you need to package it in a structured format. 
+You will need to define a clear structure using .proto and finally
+Using Protocol Buffers, 
+your serialised code might look like this:
+0D 33 33 CC 41 12 01 43 18 80 C2 D7 CB 06
+This is binary data, not human-readable. Size: Around 14 bytes
+
+Why they’re used in embedded systems.
+
+
